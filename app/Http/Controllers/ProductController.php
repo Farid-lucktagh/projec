@@ -56,7 +56,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia('products/edit', [
-            'product' => $product
+            'product' => $product,
+            'categorias' => Category::select('id', 'nombre')->get(),
+            'proveedores' => Supplier::select('id', 'nombre')->get(),
         ]);
     }
 
