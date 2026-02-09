@@ -23,7 +23,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia('categories/create', [
+            'category' => new category(),
+        ]);
     }
 
     /**
@@ -31,7 +33,9 @@ class CategoryController extends Controller
      */
     public function store(StorecategoryRequest $request)
     {
-        //
+        $valued = $request->validated();
+        category::create($valued);
+        return redirect()->route('categories.index');
     }
 
     /**

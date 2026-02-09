@@ -69,11 +69,11 @@ export default function Index({ products }: { products: Product[] }) {
                             {products.map((product) => (
                                 <TableRow key={product.id}>
                                     <TableCell className="w-[100px]">{product.id}</TableCell>
-                                    <TableCell className="font-left">{product.nombre}</TableCell>
-                                    <TableCell className="font-left">{product.categoria_id}</TableCell>
+                                    <TableCell className="text-right">{product.nombre}</TableCell>
+                                    <TableCell className="text-right">{product.categoria_id}</TableCell>
                                     <TableCell className="text-right">{product.precio}</TableCell>
                                     <TableCell className="text-right">{product.cantidad_stock}</TableCell>
-                                    <TableCell className="font-left">{product.proveedor_id}</TableCell>
+                                    <TableCell className="text-right">{product.proveedor_id}</TableCell>
                                     <TableCell className="text-right">{product.estado}</TableCell>
                                     <TableCell className="text-right">
                                         <Link href={productsRoutes.edit(product.id).url}>

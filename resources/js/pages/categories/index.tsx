@@ -23,7 +23,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Category {
     id: number;
     nombre: string;
-    decripcion: string;
+    descripcion: string;
     color: string;
     estado: string;
 }
@@ -39,29 +39,33 @@ export default function index({ categories }: { categories: Category[] }) {
 
     }
 
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Categories" />
-            <div>
+            <div className="m-4">
+                <Link href={categoriesRoute.create().url}>
+                    <Button className="mb-4">
+                        Create Category
+                    </Button>
+                </Link>
                 <Table>
                     <TableCaption>A list of categories.</TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>ID</TableHead>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>Descripción</TableHead>
-                            <TableHead>Color</TableHead>
-                            <TableHead>Estado</TableHead>
-                            <TableHead>Acciones</TableHead>
+                            <TableHead className="w-[100px]">ID</TableHead>
+                            <TableHead className="text-right">Nombre</TableHead>
+                            <TableHead className="text-right">Descripción</TableHead>
+                            <TableHead className="text-right">Color</TableHead>
+                            <TableHead className="text-right">Estado</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {categories.map((category) => (
                             <TableRow key={category.id}>
-                                <TableCell className="text-right">{category.id}</TableCell>
+                                <TableCell className="w-[100px]">{category.id}</TableCell>
                                 <TableCell className="text-right">{category.nombre}</TableCell>
-                                <TableCell className="text-right">{category.decripcion}</TableCell>
+                                <TableCell className="text-right">{category.descripcion}</TableCell>
                                 <TableCell className="text-right">{category.color}</TableCell>
                                 <TableCell className="text-right">{category.estado}</TableCell>
                                 <TableCell className="text-right">
