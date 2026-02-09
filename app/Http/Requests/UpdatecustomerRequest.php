@@ -11,7 +11,7 @@ class UpdatecustomerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class UpdatecustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => 'required|string|max:255',
+            'tipo_documento' => 'required|string|max:50',
+            'numero_documento' => 'required|string|max:50|unique:customers,numero_documento,' . $this->customer->id,
+            'telefono' => 'nullable|string|max:20',
+            'correo' => 'nullable|email|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'total_compras' => 'nullable|numeric|min:0',
+            'estado' => 'required|in:activo,inactivo',
         ];
     }
 }
