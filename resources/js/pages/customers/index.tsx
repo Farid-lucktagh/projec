@@ -1,5 +1,6 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -12,6 +13,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import customersRoutes from '@/routes/customers';
 import type { BreadcrumbItem } from '@/types';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
 
@@ -33,9 +35,21 @@ interface Customer {
     estado: string;
 }
 
-export default function Index({ customers }: { customers: Customer[] }) {
+export default function Index({ customers, filters }: { customers: Customer[], filters: { search?: string } }) {
 
     const { processing, delete: destroy } = useForm();
+    const [search, setSearch] = useState(filters.search || '');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.get(customersRoutes.index().url, { search }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [search]);
 
     const handleDelete = (id: number) => {
         if (window.confirm('Are you sure you want to delete this customer?')) {
@@ -47,14 +61,23 @@ export default function Index({ customers }: { customers: Customer[] }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Customers | list" />
             <div className="m-4">
-                <Link href={customersRoutes.create().url}>
-                    <Button className="mb-4">
-                        Create Customer
-                    </Button>
-                </Link>
-                {customers.length > 0 && (
+                <div className="flex justify-between items-center mb-4">
+                    <Link href={customersRoutes.create().url}>
+                        <Button>
+                            Create Customer
+                        </Button>
+                    </Link>
+                    <div className="w-64">
+                        <Input
+                            placeholder="Search customers by name..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
+                {customers.length > 0 ? (
                     <Table>
-                        <TableCaption>A list of your recent customers   .</TableCaption>
+                        <TableCaption>A list of your recent customers.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px]">ID</TableHead>
@@ -97,6 +120,10 @@ export default function Index({ customers }: { customers: Customer[] }) {
                             ))}
                         </TableBody>
                     </Table>
+                ) : (
+                    <div className="text-center py-10 text-muted-foreground">
+                        No customers found.
+                    </div>
                 )}            
             </div>
 

@@ -1,5 +1,6 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -11,6 +12,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import salesRoutes from '@/routes/sales';
 import type { BreadcrumbItem } from '@/types';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,10 +35,23 @@ interface Sale {
     cliente?: Cliente;
 }
 
-export default function Index({ sales }: { sales: Sale[] }) {
+export default function Index({ sales, filters }: { sales: Sale[], filters: { search?: string } }) {
     const { processing, delete: destroy } = useForm();
     const page = usePage<{ flash?: { success?: string } }>();
     const success = page.props.flash?.success;
+
+    const [search, setSearch] = useState(filters.search || '');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.get(salesRoutes.index().url, { search }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [search]);
 
     const handleDelete = (id: number) => {
         if (window.confirm('Are you sure you want to delete this sale?')) {
@@ -53,12 +68,21 @@ export default function Index({ sales }: { sales: Sale[] }) {
                         {success}
                     </div>
                 )}
-                <Link href={salesRoutes.create().url}>
-                    <Button className="mb-4">
-                        Create Sale
-                    </Button>
-                </Link>
-                {sales.length > 0 && (
+                <div className="flex justify-between items-center mb-4">
+                    <Link href={salesRoutes.create().url}>
+                        <Button>
+                            Create Sale
+                        </Button>
+                    </Link>
+                    <div className="w-96">
+                        <Input
+                            placeholder="Search by client name or document..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
+                {sales.length > 0 ? (
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -95,6 +119,10 @@ export default function Index({ sales }: { sales: Sale[] }) {
                             ))}
                         </TableBody>
                     </Table>
+                ) : (
+                    <div className="text-center py-10 text-muted-foreground">
+                        No sales found.
+                    </div>
                 )}
             </div>
 

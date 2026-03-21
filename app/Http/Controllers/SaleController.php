@@ -17,10 +17,21 @@ class SaleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
+        $query = Sale::with('cliente');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->whereHas('cliente', function ($q) use ($search) {
+                $q->where('nombre', 'like', '%' . $search . '%')
+                  ->orWhere('numero_documento', 'like', '%' . $search . '%');
+            });
+        }
+
         return inertia('sales/index',[
-            'sales' => Sale::with('cliente')->latest()->get()
+            'sales' => $query->latest()->get(),
+            'filters' => $request->only(['search'])
         ]);
     }
 

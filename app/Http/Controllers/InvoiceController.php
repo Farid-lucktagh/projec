@@ -13,14 +13,26 @@ use App\Http\Requests\StoreInvoiceRequest;
 
 class InvoiceController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $invoices = Invoice::with('cliente')
-            ->latest('fecha_emision')
-            ->get();
+        $query = Invoice::with('cliente');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('codigo', 'like', '%' . $search . '%')
+                  ->orWhereHas('cliente', function ($q) use ($search) {
+                      $q->where('nombre', 'like', '%' . $search . '%')
+                        ->orWhere('numero_documento', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        $invoices = $query->latest('fecha_emision')->get();
 
         return inertia('invoices/index', [
             'invoices' => $invoices,
+            'filters' => $request->only(['search'])
         ]);
     }
 

@@ -11,10 +11,17 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
+        $query = customer::query();
+
+        if ($request->has('search')) {
+            $query->where('nombre', 'like', '%' . $request->search . '%');
+        }
+
         return Inertia('customers/index', [
-            'customers' => customer::all()
+            'customers' => $query->get(),
+            'filters' => $request->only(['search'])
         ]);
     }
 

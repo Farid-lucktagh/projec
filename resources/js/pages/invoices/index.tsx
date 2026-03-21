@@ -1,5 +1,6 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,10 +41,23 @@ interface Invoice {
     cliente?: Cliente | null;
 }
 
-export default function Index({ invoices }: { invoices: Invoice[] }) {
+export default function Index({ invoices, filters }: { invoices: Invoice[], filters: { search?: string } }) {
     const { processing, delete: destroy } = useForm();
     const page = usePage<{ flash?: { success?: string } }>();
     const success = page.props.flash?.success;
+
+    const [search, setSearch] = useState(filters.search || '');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.get('/invoices', { search }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [search]);
 
     const handleDelete = (id: number) => {
         if (window.confirm('Seguro que deseas eliminar esta factura?')) {
@@ -78,11 +93,20 @@ export default function Index({ invoices }: { invoices: Invoice[] }) {
                     </div>
                 )}
 
-                <Link href="/invoices/create">
-                    <Button className="mb-4">
-                        Crear Factura
-                    </Button>
-                </Link>
+                <div className="flex justify-between items-center mb-4">
+                    <Link href="/invoices/create">
+                        <Button>
+                            Crear Factura
+                        </Button>
+                    </Link>
+                    <div className="w-96">
+                        <Input
+                            placeholder="Search by code, client name or document..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
 
                 {invoices.length > 0 ? (
                     <Table>
@@ -160,9 +184,9 @@ export default function Index({ invoices }: { invoices: Invoice[] }) {
                         </TableBody>
                     </Table>
                 ) : (
-                    <p className="text-sm text-muted-foreground py-8 text-center">
-                        No hay facturas registradas.
-                    </p>
+                    <div className="text-center py-10 text-muted-foreground border rounded-lg bg-gray-50/50">
+                        No se encontraron facturas.
+                    </div>
                 )}
             </div>
         </AppLayout>

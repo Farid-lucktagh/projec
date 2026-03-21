@@ -1,6 +1,6 @@
-import { Head, Link, 
-    useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -13,6 +13,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import categoriesRoute from '@/routes/categories';
 import type { BreadcrumbItem } from '@/types';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,9 +30,21 @@ interface Category {
     estado: string;
 }
 
-export default function index({ categories }: { categories: Category[] }) {
+export default function Index({ categories, filters }: { categories: Category[], filters: { search?: string } }) {
 
     const { processing, delete: destroy } = useForm();
+    const [search, setSearch] = useState(filters.search || '');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.get(categoriesRoute.index().url, { search }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [search]);
 
     const handleDelete = (id: number) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
@@ -44,47 +57,62 @@ export default function index({ categories }: { categories: Category[] }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Categories" />
             <div className="m-4">
-                <Link href={categoriesRoute.create().url}>
-                    <Button className="mb-4">
-                        Create Category
-                    </Button>
-                </Link>
-                <Table>
-                    <TableCaption>A list of categories.</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[100px]">ID</TableHead>
-                            <TableHead className="text-right">Nombre</TableHead>
-                            <TableHead className="text-right">Descripción</TableHead>
-                            <TableHead className="text-right">Color</TableHead>
-                            <TableHead className="text-right">Estado</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {categories.map((category) => (
-                            <TableRow key={category.id}>
-                                <TableCell className="w-[100px]">{category.id}</TableCell>
-                                <TableCell className="text-right">{category.nombre}</TableCell>
-                                <TableCell className="text-right">{category.descripcion}</TableCell>
-                                <TableCell className="text-right">{category.color}</TableCell>
-                                <TableCell className="text-right">{category.estado}</TableCell>
-                                <TableCell className="text-right">
-                                    <Link href={categoriesRoute.edit(category.id).url}>
-                                        <Button className="mr-2">
-                                            Edit
-                                        </Button>
-                                    </Link>
-                                    <Button disabled={processing}
-                                            className="bg-red-500 text-white" 
-                                            onClick={() => handleDelete(category.id)}>
-                                        Delete
-                                    </Button>
-                                </TableCell>
+                <div className="flex justify-between items-center mb-4">
+                    <Link href={categoriesRoute.create().url}>
+                        <Button>
+                            Create Category
+                        </Button>
+                    </Link>
+                    <div className="w-64">
+                        <Input
+                            placeholder="Search categories by name..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
+                {categories.length > 0 ? (
+                    <Table>
+                        <TableCaption>A list of categories.</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">ID</TableHead>
+                                <TableHead className="text-right">Nombre</TableHead>
+                                <TableHead className="text-right">Descripción</TableHead>
+                                <TableHead className="text-right">Color</TableHead>
+                                <TableHead className="text-right">Estado</TableHead>
+                                <TableHead className="text-right">Acciones</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>                
+                        </TableHeader>
+                        <TableBody>
+                            {categories.map((category) => (
+                                <TableRow key={category.id}>
+                                    <TableCell className="w-[100px]">{category.id}</TableCell>
+                                    <TableCell className="text-right">{category.nombre}</TableCell>
+                                    <TableCell className="text-right">{category.descripcion}</TableCell>
+                                    <TableCell className="text-right">{category.color}</TableCell>
+                                    <TableCell className="text-right">{category.estado}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Link href={categoriesRoute.edit(category.id).url}>
+                                            <Button className="mr-2">
+                                                Edit
+                                            </Button>
+                                        </Link>
+                                        <Button disabled={processing}
+                                                className="bg-red-500 text-white" 
+                                                onClick={() => handleDelete(category.id)}>
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                ) : (
+                    <div className="text-center py-10 text-muted-foreground">
+                        No categories found.
+                    </div>
+                )}                
             </div>
 
 

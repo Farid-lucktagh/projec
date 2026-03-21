@@ -13,10 +13,26 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
+        $query = Product::with(['categoria', 'proveedor']);
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'like', '%' . $search . '%')
+                  ->orWhereHas('categoria', function ($q) use ($search) {
+                      $q->where('nombre', 'like', '%' . $search . '%');
+                  })
+                  ->orWhereHas('proveedor', function ($q) use ($search) {
+                      $q->where('nombre', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
         return Inertia('products/index', [
-            'products' => Product::all()
+            'products' => $query->get(),
+            'filters' => $request->only(['search'])
         ]);
     }
 
