@@ -23,6 +23,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ReportController;
 
 /**
  * =====================
@@ -128,5 +129,15 @@ Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoi
 Route::post('invoices', [InvoiceController::class, 'store'])->name('invoices.store');
 Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
 
+/**
+ * =====================
+ * RUTAS DE REPORTES
+ * ===================== 
+ * Generación de reportes de ventas, inventario y clientes.
+ * Permite exportar datos en formatos CSV o PDF.
+ */
+//report routes
+Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('reports/sales-over-time', [ReportController::class, 'salesOverTime'])->name('reports.sales-over-time');
 
 require __DIR__.'/settings.php';

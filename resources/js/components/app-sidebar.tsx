@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FileText, Folder, LayoutGrid, Package, Receipt, ShoppingCart, Tags, UserCog, Users } from 'lucide-react';
+import { BookOpen, ChartNoAxesCombined, FileText, Folder, LayoutGrid, Package, Receipt, ShoppingCart, Tags, UserCog, Users } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -17,6 +17,7 @@ import categories from '@/routes/categories';
 import customers from '@/routes/customers';
 import invoices from '@/routes/invoices';
 import products from '@/routes/products';
+import reports from '@/routes/reports';
 import sales from '@/routes/sales';
 import users from '@/routes/users';
 import type { NavItem } from '@/types';
@@ -51,6 +52,11 @@ const mainNavItems: NavItem[] = [
         title: 'Sales',
         href: sales.index(),
         icon: ShoppingCart,
+    },
+    {
+        title: 'Reports',
+        href: reports.index(),
+        icon: ChartNoAxesCombined,
     },
     {
         title: 'Users',

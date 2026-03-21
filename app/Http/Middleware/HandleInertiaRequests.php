@@ -5,6 +5,11 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+use App\Models\Sale;
+use App\Models\Invoice;
+use App\Models\SaleItem;
+use App\Models\InvoiceItem;
+
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -42,6 +47,19 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'totals' => [
+                'sales_count' => Sale::count(),
+                'invoices_count' => Invoice::count(),
+                'customers_today_count' => (function() {
+                    $salesCustomers = Sale::whereDate('created_at', now())->distinct('cliente_id')->pluck('cliente_id');
+                    $invoiceDocuments = Invoice::whereDate('fecha_emision', now())->distinct('cliente_id')->pluck('cliente_id');
+                    
+                    // Combinar ambos y contar únicos
+                    return $salesCustomers->merge($invoiceDocuments)->unique()->count();
+                })(),
+                'money_today_total' => (float) (Sale::whereDate('created_at', now())->sum('total') + Invoice::whereDate('fecha_emision', now())->sum('total')),
+                'products_sold_count' => (int) (SaleItem::sum('cantidad') + InvoiceItem::sum('cantidad')),
+            ],
         ];
     }
 }
