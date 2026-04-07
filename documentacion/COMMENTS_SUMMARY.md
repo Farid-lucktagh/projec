@@ -26,17 +26,21 @@ He comentado completamente el proyecto de gestión. Aquí está lo que se docume
 - Relaciones Eloquent bien documentadas
 - Scopes y métodos auxiliares explicados
 
-#### **Controllers** - 8 Archivos
-- ✅ `SaleController.php` - Control de ventas completo
-- ✅ `InvoiceController.php` - Generación de facturas
-- ✅ `ProductController.php` - CRUD de productos
-- ✅ `CategoryController.php` - CRUD de categorías
-- ✅ `CustomerController.php` - CRUD de clientes
-- ✅ `UserController.php` - CRUD de usuarios
-- ✅ `SuppliserController.php` - CRUD de proveedores
+#### **Controllers** - 9 Archivos
+- ✅ `SaleController.php` - Control de ventas completo con búsqueda
+- ✅ `InvoiceController.php` - Generación de facturas con búsqueda
+- ✅ `ReportController.php` - Dashboard dinámico y gráficas
+- ✅ `ProductController.php` - CRUD de productos con filtros avanzados
+- ✅ `CategoryController.php` - CRUD de categorías con búsqueda
+- ✅ `CustomerController.php` - CRUD de clientes con búsqueda
+- ✅ `UserController.php` - CRUD de usuarios con búsqueda
 - ✅ `Controller.php` - Clase base
 
 **Documentación incluida:**
+- Búsqueda reactiva con debounce (300ms)
+- Filtros por relaciones (Categoría/Proveedor en Productos)
+- Reportes con totales dinámicos
+- Gráficas con filtros de fecha dinámicos
 - Descripción de cada método
 - Parámetros documentados con tipos
 - Retornos especificados
@@ -364,4 +368,4 @@ Proyecto/
 ---
 
 **Proyecto completamente comentado y documentado**  
-**Último actualizado: 24 de febrero de 2026**
+**Último actualizado: 25 de marzo de 2026**

@@ -41,20 +41,33 @@ Todos los modelos han sido documentados con:
 **InvoiceController.php**
 ```php
 // Métodos comentados:
-// - index()    : Lista facturas
+// - index()    : Lista facturas (con búsqueda por código/cliente)
 // - create()   : Formulario nueva factura
 // - store()    : Genera factura con código único (FAC-XXXXX)
 // - destroy()  : Elimina factura
 ```
 
+**ReportController.php**
+```php
+// Métodos comentados:
+// - index()           : Dashboard con totales dinámicos
+// - salesOverTime()   : Datos para gráfica con filtros de fecha
+```
+
 **ProductController.php**
-- Métodos CRUD con documentación de parámetros y retornos
+- Métodos CRUD con búsqueda por nombre, categoría y proveedor.
 
 **CategoryController.php**
-- CRUD de categorías con tipos Inertia
+- CRUD de categorías con búsqueda por nombre.
 
 **CustomerController.php**
-- CRUD de clientes con validación
+- CRUD de clientes con búsqueda por nombre y documento.
+
+**UserController.php**
+- CRUD de usuarios con búsqueda por nombre.
+
+**SaleController.php**
+- CRUD de ventas con búsqueda por cliente y documento.
 
 ### 3. **Middlewares (app/Http/Middleware/)**
 
@@ -289,4 +302,4 @@ Invoice { id, codigo, documento, usuario_id, subtotal, porcentaje_iva, monto_iva
 
 ---
 
-**Última actualización:** 24 de febrero de 2026
+**Última actualización:** 25 de marzo de 2026

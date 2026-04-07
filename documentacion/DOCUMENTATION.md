@@ -144,7 +144,7 @@ config/
 
 ### SaleController
 **Métodos:**
-- `index()` - Listar ventas
+- `index()` - Listar ventas (con soporte de búsqueda)
 - `create()` - Formulario crear venta
 - `store()` - Guardar venta (con transacción BD)
 - `show()` - Ver detalles
@@ -152,19 +152,26 @@ config/
 - `update()` - Actualizar venta
 - `destroy()` - Eliminar venta
 
-**Característica importante:** Decrementación automática de stock al crear/actualizar venta
+**Característica importante:** Búsqueda reactiva por cliente/documento y decrementación automática de stock.
 
 ### InvoiceController
 **Métodos:**
-- `index()` - Listar facturas
+- `index()` - Listar facturas (con soporte de búsqueda)
 - `create()` - Formulario crear factura
 - `store()` - Generar factura (genera código único)
 - `destroy()` - Eliminar factura
 
-**Característica importante:** Genera código de factura único (FAC-000001, FAC-000002...), manejo de IVA y descuentos
+**Característica importante:** Búsqueda por código/cliente, generación de código secuencial (FAC-000001), manejo de IVA y descuentos.
+
+### ReportController
+**Métodos:**
+- `index()` - Renderiza vista de reportes con totales generales.
+- `salesOverTime()` - Provee datos JSON para la gráfica de ventas con soporte de rango de fechas.
+
+**Característica importante:** Dashboard interactivo con gráficas dinámicas.
 
 ### ProductController, CategoryController, CustomerController
-CRUD estándar con vistas Inertia
+CRUD estándar con vistas Inertia y búsqueda en tiempo real integrada.
 
 ---
 
@@ -330,28 +337,33 @@ resources/js/
 - Perfil y cambio de contraseña
 
 ### 5. Reportes
-- Logs de actividad de usuarios
-- Histórico de transacciones
-- Información de cliente
+- Dashboard con métricas clave (Ventas totales, dinero hoy, clientes atendidos, productos vendidos).
+- Gráfica interactiva de ventas con filtros de rango de fechas.
+- Logs de actividad de usuarios y auditoría.
+
+### 6. Búsqueda Global
+- Búsqueda en tiempo real con debounce en Productos, Categorías, Clientes, Usuarios, Ventas y Facturas.
+- Filtros avanzados por relaciones (ej: buscar productos por nombre de proveedor).
 
 ---
 
 ## 📝 Notas de Desarrollo
 
 ### Convenciones
-- Nombres de modelos singulares (User, Product, Sale)
-- Controladores con sufijo "Controller"
-- Requests con "Store" y "Update" para acciones
-- Métodos public para acciones principales
-- Comments en secciones de código complejo
+- Nombres de modelos singulares (User, Product, Sale).
+- Controladores con sufijo "Controller".
+- Requests con "Store" y "Update" para acciones.
+- Búsqueda frontend usando `useEffect` y `router.get` de Inertia.
+- Tipado estricto en TypeScript para props y datos de API.
 
 ### Relaciones Importantes
 ```php
 // Usuario tiene muchas ventas
 User::ventas()      // Sale
 
-// Producto pertenece a una categoría
+// Producto pertenece a una categoría y proveedor
 Product::categoria() // Category
+Product::proveedor() // Supplier
 
 // Venta tiene muchos items
 Sale::items()       // SaleItem
@@ -361,16 +373,17 @@ Customer::ventas()  // Sale
 ```
 
 ### Stock Tracking
-- Decremento en `SaleController@store()` y `InvoiceController@store()`
-- Estados: 'disponible', 'bajo', 'sin'
-- `stock_minimo` define umbral de alerta
+- Decremento en `SaleController@store()` y `InvoiceController@store()`.
+- Estados: 'disponible', 'bajo', 'sin'.
+- `stock_minimo` define umbral de alerta.
 
 ---
 
 ## 🚀 Próximas Mejoras
 
+- [x] Dashboard con gráficas
+- [x] Búsqueda avanzada en tiempo real
 - [ ] Exportación de reportes (PDF, Excel)
-- [ ] Dashboard con gráficas
 - [ ] Notificaciones en tiempo real
 - [ ] Integración de pagos
 - [ ] API RESTful
