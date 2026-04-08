@@ -86,7 +86,6 @@ export default function Index({ sales, filters }: { sales: Sale[], filters: { se
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>ID</TableHead>
                                 <TableHead>Cliente</TableHead>
                                 <TableHead>Documento</TableHead>
                                 <TableHead className="text-right">Subtotal</TableHead>
@@ -99,8 +98,7 @@ export default function Index({ sales, filters }: { sales: Sale[], filters: { se
                         <TableBody>
                             {sales.map((sale) => (
                                 <TableRow key={sale.id}>
-                                    <TableCell>{sale.id}</TableCell>
-                                    <TableCell>{sale.cliente?.nombre ?? '-'}</TableCell>
+                                    <TableCell className="font-medium">{sale.cliente?.nombre ?? '-'}</TableCell>
                                     <TableCell>{sale.cliente?.numero_documento ?? '-'}</TableCell>
                                     <TableCell className="text-right">{Number(sale.subtotal).toFixed(2)}</TableCell>
                                     <TableCell className="text-right">{Number(sale.impuesto).toFixed(2)}</TableCell>

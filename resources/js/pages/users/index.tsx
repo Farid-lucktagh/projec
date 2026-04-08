@@ -76,8 +76,7 @@ export default function Index({ users, filters }: { users: User[], filters: { se
                         <TableCaption>A list of users.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">ID</TableHead>
-                                <TableHead className="text-right">Name</TableHead>
+                                <TableHead>Name</TableHead>
                                 <TableHead className="text-right">Email</TableHead>
                                 <TableHead className="text-right">Rol</TableHead>
                                 <TableHead className="text-right">Estado</TableHead>
@@ -87,8 +86,7 @@ export default function Index({ users, filters }: { users: User[], filters: { se
                         <TableBody>
                             {users.map((user) => (
                                 <TableRow key={user.id}>
-                                    <TableCell className="w-[100px]">{user.id}</TableCell>
-                                    <TableCell className="text-right">{user.name}</TableCell>
+                                    <TableCell className="font-medium">{user.name}</TableCell>
                                     <TableCell className="text-right">{user.email}</TableCell>
                                     <TableCell className="text-right">{user.rol}</TableCell>
                                     <TableCell className="text-right">{user.estado}</TableCell>

@@ -86,8 +86,7 @@ export default function Index({ products, filters }: { products: Product[], filt
                         <TableCaption>A list of your recent products.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">ID</TableHead>
-                                <TableHead className="text-right">Nombre</TableHead>
+                                <TableHead>Nombre</TableHead>
                                 <TableHead className="text-right">Categoria</TableHead>
                                 <TableHead className="text-right">Precio</TableHead>
                                 <TableHead className="text-right">Stock</TableHead>
@@ -99,8 +98,7 @@ export default function Index({ products, filters }: { products: Product[], filt
                         <TableBody>
                             {products.map((product) => (
                                 <TableRow key={product.id}>
-                                    <TableCell className="w-[100px]">{product.id}</TableCell>
-                                    <TableCell className="text-right">{product.nombre}</TableCell>
+                                    <TableCell className="font-medium">{product.nombre}</TableCell>
                                     <TableCell className="text-right">{product.categoria?.nombre || product.categoria_id}</TableCell>
                                     <TableCell className="text-right">{product.precio}</TableCell>
                                     <TableCell className="text-right">{product.cantidad_stock}</TableCell>

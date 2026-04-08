@@ -80,8 +80,7 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                         <TableCaption>A list of your recent customers.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">ID</TableHead>
-                                <TableHead className="text-right">Nombre</TableHead>
+                                <TableHead>Nombre</TableHead>
                                 <TableHead className="text-right">Tipo Documento</TableHead>
                                 <TableHead className="text-right">Número Documento</TableHead>
                                 <TableHead className="text-right">Teléfono</TableHead>
@@ -95,8 +94,7 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                         <TableBody>
                             {customers.map((customer) => (
                                 <TableRow key={customer.id}>
-                                    <TableCell className="w-[100px]">{customer.id}</TableCell>
-                                    <TableCell className="text-right">{customer.nombre}</TableCell>
+                                    <TableCell className="font-medium">{customer.nombre}</TableCell>
                                     <TableCell className="text-right">{customer.tipo_documento}</TableCell>
                                     <TableCell className="text-right">{customer.numero_documento}</TableCell>
                                     <TableCell className="text-right">{customer.telefono}</TableCell>

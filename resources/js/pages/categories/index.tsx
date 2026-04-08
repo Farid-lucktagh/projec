@@ -76,8 +76,7 @@ export default function Index({ categories, filters }: { categories: Category[],
                         <TableCaption>A list of categories.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">ID</TableHead>
-                                <TableHead className="text-right">Nombre</TableHead>
+                                <TableHead>Nombre</TableHead>
                                 <TableHead className="text-right">Descripción</TableHead>
                                 <TableHead className="text-right">Color</TableHead>
                                 <TableHead className="text-right">Estado</TableHead>
@@ -87,10 +86,18 @@ export default function Index({ categories, filters }: { categories: Category[],
                         <TableBody>
                             {categories.map((category) => (
                                 <TableRow key={category.id}>
-                                    <TableCell className="w-[100px]">{category.id}</TableCell>
-                                    <TableCell className="text-right">{category.nombre}</TableCell>
+                                    <TableCell className="font-medium">{category.nombre}</TableCell>
                                     <TableCell className="text-right">{category.descripcion}</TableCell>
-                                    <TableCell className="text-right">{category.color}</TableCell>
+                                    <TableCell className="text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                            <span className="text-xs font-mono text-muted-foreground">{category.color}</span>
+                                            <div 
+                                                className="size-4 rounded-full border border-black/10 shadow-sm" 
+                                                style={{ backgroundColor: category.color }}
+                                                title={category.color}
+                                            />
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="text-right">{category.estado}</TableCell>
                                     <TableCell className="text-right">
                                         <Link href={categoriesRoute.edit(category.id).url}>
