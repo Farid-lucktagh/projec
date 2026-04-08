@@ -86,7 +86,6 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                                 <TableHead className="text-right">Teléfono</TableHead>
                                 <TableHead className="text-right">Correo</TableHead>
                                 <TableHead className="text-right">Dirección</TableHead>
-                                <TableHead className="text-right">Total Compras</TableHead>
                                 <TableHead className="text-right">Estado</TableHead>
                                 <TableHead className="text-right">Acciones</TableHead>
                             </TableRow>
@@ -100,7 +99,6 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                                     <TableCell className="text-right">{customer.telefono}</TableCell>
                                     <TableCell className="text-right">{customer.correo}</TableCell>
                                     <TableCell className="text-right">{customer.direccion}</TableCell>
-                                    <TableCell className="text-right">{customer.total_compras}</TableCell>
                                     <TableCell className="text-right">{customer.estado}</TableCell>
                                     <TableCell className="text-right">
                                         <Link href={customersRoutes.edit(customer.id).url}>

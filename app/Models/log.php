@@ -20,6 +20,10 @@ class Log extends Model
         'creado_en',
     ];
 
+    protected $casts = [
+        'creado_en' => 'datetime',
+    ];
+
     /**
      * =====================
      * Relaciones

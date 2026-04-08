@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
@@ -82,6 +83,104 @@ class ReportController extends Controller
             'top_products' => $topProducts,
             'recent_logs' => $recentLogs,
         ]);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $from = $request->query('from');
+        $to = $request->query('to');
+        $sections = $request->query('sections', []);
+        
+        $startDate = $from ? Carbon::parse($from)->startOfDay() : Carbon::now()->startOfMonth();
+        $endDate = $to ? Carbon::parse($to)->endOfDay() : Carbon::now()->endOfDay();
+
+        $data = [
+            'date_range' => [
+                'from' => $startDate->format('Y-m-d'),
+                'to' => $endDate->format('Y-m-d'),
+            ],
+            'sections' => $sections,
+        ];
+
+        if (in_array('sales', $sections) || in_array('money', $sections)) {
+            $sales = Sale::whereBetween('created_at', [$startDate, $endDate])->get();
+            $invoices = Invoice::whereBetween('fecha_emision', [$startDate, $endDate])->get();
+            
+            $data['sales_summary'] = [
+                'total_sales_count' => $sales->count(),
+                'total_invoices_count' => $invoices->count(),
+                'total_money' => $sales->sum('total') + $invoices->sum('total'),
+                'sales_list' => in_array('sales', $sections) ? $sales->load('cliente') : [],
+                'invoices_list' => in_array('sales', $sections) ? $invoices->load('cliente') : [],
+            ];
+        }
+
+        if (in_array('customers', $sections)) {
+            $salesCustomers = Sale::whereBetween('created_at', [$startDate, $endDate])->pluck('cliente_id');
+            $invoiceCustomers = Invoice::whereBetween('fecha_emision', [$startDate, $endDate])->pluck('cliente_id');
+            $customerIds = $salesCustomers->merge($invoiceCustomers)->filter()->unique();
+            $data['customers'] = \App\Models\Customer::whereIn('id', $customerIds)->get();
+        }
+
+        if (in_array('products', $sections)) {
+            $saleItemIds = SaleItem::whereHas('venta', function($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            })->pluck('producto_id');
+            
+            $invoiceItemIds = InvoiceItem::whereHas('factura', function($q) use ($startDate, $endDate) {
+                $q->whereBetween('fecha_emision', [$startDate, $endDate]);
+            })->pluck('producto_id');
+            
+            $productIds = $saleItemIds->merge($invoiceItemIds)->unique();
+            $data['products_sold'] = Product::whereIn('id', $productIds)->with('categoria')->get();
+        }
+
+        if (in_array('inventory', $sections)) {
+            $data['inventory'] = [
+                'out_of_stock' => Product::where('cantidad_stock', '<=', 0)->with('categoria')->get(),
+                'low_stock' => Product::whereColumn('cantidad_stock', '<=', 'stock_minimo')
+                    ->where('cantidad_stock', '>', 0)
+                    ->with('categoria')
+                    ->get(),
+                'in_stock' => Product::whereColumn('cantidad_stock', '>', 'stock_minimo')->with('categoria')->get(),
+            ];
+        }
+
+        if (in_array('top_products', $sections)) {
+            $saleItemsQuery = SaleItem::whereHas('venta', function($q) use ($startDate, $endDate) {
+                    $q->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->select('producto_id', DB::raw('SUM(cantidad) as total_sold'))
+                ->groupBy('producto_id');
+
+            $invoiceItemsQuery = InvoiceItem::whereHas('factura', function($q) use ($startDate, $endDate) {
+                    $q->whereBetween('fecha_emision', [$startDate, $endDate]);
+                })
+                ->select('producto_id', DB::raw('SUM(cantidad) as total_sold'))
+                ->groupBy('producto_id');
+
+            $data['top_products'] = Product::select('products.id', 'products.nombre', DB::raw('(COALESCE(sales.total_sold, 0) + COALESCE(invoices.total_sold, 0)) as total_sold'))
+                ->leftJoinSub($saleItemsQuery, 'sales', function ($join) {
+                    $join->on('products.id', '=', 'sales.producto_id');
+                })
+                ->leftJoinSub($invoiceItemsQuery, 'invoices', function ($join) {
+                    $join->on('products.id', '=', 'invoices.producto_id');
+                })
+                ->where(DB::raw('COALESCE(sales.total_sold, 0) + COALESCE(invoices.total_sold, 0)'), '>', 0)
+                ->orderByDesc('total_sold')
+                ->limit(10)
+                ->get();
+        }
+
+        if (in_array('movements', $sections)) {
+            $data['movements'] = Log::with('usuario')
+                ->whereBetween('creado_en', [$startDate, $endDate])
+                ->orderByDesc('creado_en')
+                ->get();
+        }
+
+        $pdf = Pdf::loadView('reports.pdf', $data);
+        return $pdf->download('reporte-luckfeer-' . now()->format('YmdHis') . '.pdf');
     }
 
     public function getLogs(Request $request)

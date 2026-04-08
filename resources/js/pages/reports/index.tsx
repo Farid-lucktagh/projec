@@ -1,14 +1,17 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import SalesChart from '@/components/sales-chart';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import productsRoutes from '@/routes/products';
 import reportsRoutes from '@/routes/reports';
 import type { BreadcrumbItem, SharedData } from '@/types';
-import { AlertTriangle, Clock, Edit, History, PackageSearch, Search } from 'lucide-react';
+import { AlertTriangle, Clock, Edit, FileDown, History, PackageSearch, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface Product {
@@ -88,6 +91,47 @@ export default function Dashboard() {
     const [isLoadingProductSales, setIsLoadingProductSales] = useState(false);
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
 
+    // PDF Export State
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+    const [exportDates, setExportDates] = useState({ 
+        from: new Date().toISOString().split('T')[0], 
+        to: new Date().toISOString().split('T')[0] 
+    });
+    const [exportSections, setExportSections] = useState({
+        sales: true,
+        customers: true,
+        products: true,
+        inventory: true,
+        top_products: true,
+        movements: true,
+        money: true,
+    });
+
+    const handleExportPdf = () => {
+        const selectedSections = Object.entries(exportSections)
+            .filter(([_, checked]) => checked)
+            .map(([key]) => key);
+        
+        if (selectedSections.length === 0) {
+            alert('Por favor selecciona al menos una sección para el reporte.');
+            return;
+        }
+
+        const query = new URLSearchParams({
+            from: exportDates.from,
+            to: exportDates.to,
+        });
+        
+        selectedSections.forEach(section => query.append('sections[]', section));
+        
+        window.open(`/reports/export-pdf?${query.toString()}`, '_blank');
+        setIsExportModalOpen(false);
+    };
+
+    const toggleSection = (section: keyof typeof exportSections) => {
+        setExportSections(prev => ({ ...prev, [section]: !prev[section] }));
+    };
+
     const fetchAllLogs = async () => {
         setIsLoadingLogs(true);
         try {
@@ -131,6 +175,87 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Reports" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+                
+                <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">Resumen Administrativo</h2>
+                    
+                    <Dialog open={isExportModalOpen} onOpenChange={setIsExportModalOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" className="gap-2">
+                                <FileDown className="size-4" />
+                                Exportar Reporte PDF
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Configurar Reporte PDF</DialogTitle>
+                                <DialogDescription>
+                                    Elige el rango de fechas y las secciones que deseas incluir en el reporte.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="export-from">Desde</Label>
+                                        <Input 
+                                            id="export-from" 
+                                            type="date" 
+                                            value={exportDates.from} 
+                                            onChange={(e) => setExportDates(prev => ({ ...prev, from: e.target.value }))}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="export-to">Hasta</Label>
+                                        <Input 
+                                            id="export-to" 
+                                            type="date" 
+                                            value={exportDates.to} 
+                                            onChange={(e) => setExportDates(prev => ({ ...prev, to: e.target.value }))}
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div className="space-y-3">
+                                    <Label className="text-xs font-bold uppercase text-muted-foreground">Secciones a incluir</Label>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {[
+                                            { id: 'sales', label: 'Detalle de Ventas' },
+                                            { id: 'money', label: 'Dinero Acumulado' },
+                                            { id: 'customers', label: 'Clientes Atendidos' },
+                                            { id: 'products', label: 'Productos Vendidos' },
+                                            { id: 'inventory', label: 'Estado del Inventario' },
+                                            { id: 'top_products', label: 'Productos Más Vendidos' },
+                                            { id: 'movements', label: 'Últimos Movimientos' },
+                                        ].map((section) => (
+                                            <div key={section.id} className="flex items-center space-x-2">
+                                                <Checkbox 
+                                                    id={`section-${section.id}`} 
+                                                    checked={exportSections[section.id as keyof typeof exportSections]}
+                                                    onCheckedChange={() => toggleSection(section.id as keyof typeof exportSections)}
+                                                />
+                                                <Label 
+                                                    htmlFor={`section-${section.id}`}
+                                                    className="text-sm font-medium leading-none cursor-pointer"
+                                                >
+                                                    {section.label}
+                                                </Label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button type="button" variant="outline" onClick={() => setIsExportModalOpen(false)}>
+                                    Cancelar
+                                </Button>
+                                <Button type="button" onClick={handleExportPdf}>
+                                    Generar PDF
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+
                 <div className="grid auto-rows-min gap-4 md:grid-cols-4">
                     {/* Tarjeta 1: Ventas Totales */}
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center text-center">
