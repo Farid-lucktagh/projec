@@ -138,6 +138,8 @@ Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name
  */
 //report routes
 Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('reports/logs', [ReportController::class, 'getLogs'])->name('reports.logs');
+Route::get('reports/product-sales', [ReportController::class, 'getAllProductSales'])->name('reports.product-sales');
 Route::get('reports/sales-over-time', [ReportController::class, 'salesOverTime'])->name('reports.sales-over-time');
 
 require __DIR__.'/settings.php';

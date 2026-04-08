@@ -9,7 +9,7 @@ class Log extends Model
 {
     use HasFactory;
 
-    protected $table = 'activity_logs';
+    protected $table = 'logs';
 
     public $timestamps = false;
 
