@@ -25,6 +25,8 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReportController;
 
+use App\Http\Controllers\DashboardController;
+
 /**
  * =====================
  * RUTAS PÚBLICAS
@@ -45,9 +47,7 @@ Route::get('/', function () {
  */
 
 // Dashboard principal
-Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 /**
  * =====================
