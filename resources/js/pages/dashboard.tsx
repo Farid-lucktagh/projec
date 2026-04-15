@@ -21,6 +21,7 @@ interface DashboardProps extends SharedData {
         }[];
         customers_today_detailed: {
             nombre: string;
+            atendido_por: string;
             fecha: string;
             tipo: string;
         }[];
@@ -127,7 +128,7 @@ export default function Dashboard() {
                                     <div key={i} className="flex items-center justify-between text-xs border-b border-sidebar-border/30 pb-2 last:border-0">
                                         <div className="flex flex-col">
                                             <span className="font-semibold">{c.nombre}</span>
-                                            <span className="text-[10px] text-muted-foreground">{c.tipo}</span>
+                                            <span className="text-[10px] text-muted-foreground">{c.tipo} - Por: <span className="font-medium">{c.atendido_por}</span></span>
                                         </div>
                                         <span className="text-[10px] bg-blue-50 dark:bg-blue-950/30 text-blue-600 px-2 py-0.5 rounded-full font-medium">{c.fecha}</span>
                                     </div>

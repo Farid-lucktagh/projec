@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, ChartNoAxesCombined, FileText, Folder, LayoutGrid, Package, Receipt, ShoppingCart, Tags, UserCog, Users } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { BookOpen, ChartNoAxesCombined, Folder, LayoutGrid, Package, Receipt, ShoppingCart, Tags, UserCog, Users } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -20,72 +20,83 @@ import products from '@/routes/products';
 import reports from '@/routes/reports';
 import sales from '@/routes/sales';
 import users from '@/routes/users';
-import type { NavItem } from '@/types';
+import type { NavItem, SharedData } from '@/types';
 import AppLogo from './app-logo';
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,   
-    },
-    {
-        title: 'Products',
-        href: products.index(),
-        icon: Package,
-    },
-    {
-        title: 'Categories',
-        href: categories.index(),
-        icon: Tags,
-    },
-    {
-        title: 'Customers',
-        href: customers.index(),
-        icon: Users,
-    },
-    {
-        title: 'Invoices',
-        href: invoices.index(),
-        icon: Receipt,
-    },
-    {
-        title: 'Sales',
-        href: sales.index(),
-        icon: ShoppingCart,
-    },
-    {
-        title: 'Reports',
-        href: reports.index(),
-        icon: ChartNoAxesCombined,
-    },
-    {
-        title: 'Users',
-        href: users.index(),
-        icon: UserCog,
-    }
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/Farid-lucktagh/LuckFeer',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
 
 export function AppSidebar() {
+    const { auth } = usePage<SharedData>().props;
+    const userRole = auth.user.rol as string;
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: dashboard().url,
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Products',
+            href: products.index().url,
+            icon: Package,
+            visible: ['admin', 'vendedor'].includes(userRole),
+        },
+        {
+            title: 'Categories',
+            href: categories.index().url,
+            icon: Tags,
+            visible: ['admin'].includes(userRole),
+        },
+        {
+            title: 'Customers',
+            href: customers.index().url,
+            icon: Users,
+            visible: ['admin', 'vendedor'].includes(userRole),
+        },
+        {
+            title: 'Invoices',
+            href: invoices.index().url,
+            icon: Receipt,
+            visible: ['admin', 'cajero'].includes(userRole),
+        },
+        {
+            title: 'Sales',
+            href: sales.index().url,
+            icon: ShoppingCart,
+            visible: ['admin', 'vendedor'].includes(userRole),
+        },
+        {
+            title: 'Reports',
+            href: reports.index().url,
+            icon: ChartNoAxesCombined,
+            visible: ['admin'].includes(userRole),
+        },
+        {
+            title: 'Users',
+            href: users.index().url,
+            icon: UserCog,
+            visible: ['admin'].includes(userRole),
+        }
+    ].filter(item => item.visible === undefined || item.visible);
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: 'Repository',
+            href: 'https://github.com/Farid-lucktagh/LuckFeer',
+            icon: Folder,
+        },
+        {
+            title: 'Documentation',
+            href: 'https://laravel.com/docs/starter-kits#react',
+            icon: BookOpen,
+        },
+    ];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard().url} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

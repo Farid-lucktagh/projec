@@ -56,23 +56,25 @@ class DashboardController extends Controller
         $latestTransactions = $latestSales->merge($latestInvoices)->sortByDesc('fecha')->values()->take(5);
 
         // Clientes atendidos hoy detallados
-        $customersTodaySales = Sale::with('cliente:id,nombre')
+        $customersTodaySales = Sale::with(['cliente:id,nombre', 'usuario:id,name'])
             ->whereDate('created_at', $today)
             ->get()
             ->map(function($sale) {
                 return [
                     'nombre' => $sale->cliente->nombre ?? 'N/A',
+                    'atendido_por' => $sale->usuario->name ?? 'N/A',
                     'fecha' => $sale->created_at->format('Y-m-d'),
                     'tipo' => 'Venta'
                 ];
             });
 
-        $customersTodayInvoices = Invoice::with('cliente:id,nombre')
+        $customersTodayInvoices = Invoice::with(['cliente:id,nombre', 'usuario:id,name'])
             ->whereDate('fecha_emision', $today)
             ->get()
             ->map(function($invoice) {
                 return [
                     'nombre' => $invoice->cliente->nombre ?? 'N/A',
+                    'atendido_por' => $invoice->usuario->name ?? 'N/A',
                     'fecha' => Carbon::parse($invoice->fecha_emision)->format('Y-m-d'),
                     'tipo' => 'Factura'
                 ];
