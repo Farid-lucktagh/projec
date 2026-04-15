@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
 
     {
-        title: 'Products',
+        title: 'Productos',
         href: productsRoutes.index().url,
     },
 ];
@@ -58,24 +58,24 @@ export default function Index({ products, filters }: { products: Product[], filt
     }, [search]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this product?')) {
+        if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         destroy(productsRoutes.destroy(id).url);
         }
     }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Products | list" />
+            <Head title="Productos | Lista" />
             <div className="m-4">
                 <div className="flex justify-between items-center mb-4">
                     <Link href={productsRoutes.create().url}>
                         <Button>
-                            Create Product
+                            Crear Producto
                         </Button>
                     </Link>
                     <div className="w-96">
                         <Input
-                            placeholder="Search by name, category or supplier..."
+                            placeholder="Buscar por nombre, categoría o proveedor..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -83,11 +83,11 @@ export default function Index({ products, filters }: { products: Product[], filt
                 </div>
                 {products.length > 0 ? (
                     <Table>
-                        <TableCaption>A list of your recent products.</TableCaption>
+                        <TableCaption>Una lista de tus productos recientes.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Nombre</TableHead>
-                                <TableHead className="text-right">Categoria</TableHead>
+                                <TableHead className="text-right">Categoría</TableHead>
                                 <TableHead className="text-right">Precio</TableHead>
                                 <TableHead className="text-right">Stock</TableHead>
                                 <TableHead className="text-right">Proveedor</TableHead>
@@ -107,13 +107,13 @@ export default function Index({ products, filters }: { products: Product[], filt
                                     <TableCell className="text-right">
                                         <Link href={productsRoutes.edit(product.id).url}>
                                             <Button className="mr-2">
-                                                Edit
+                                                Editar
                                             </Button>
                                         </Link>
                                         <Button disabled={processing}
                                                 className="bg-red-500 text-white" 
                                                 onClick={() => handleDelete(product.id)}>
-                                            Delete
+                                            Eliminar
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -122,7 +122,7 @@ export default function Index({ products, filters }: { products: Product[], filt
                     </Table>
                 ) : (
                     <div className="text-center py-10 text-muted-foreground">
-                        No products found.
+                        No se encontraron productos.
                     </div>
                 )}            
             </div>

@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Users',
+        title: 'Usuarios',
         href: userRoute.index().url,
     },
 ];
@@ -47,7 +47,7 @@ export default function Index({ users, filters }: { users: User[], filters: { se
     }, [search]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this user?')) {
+        if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
             destroy(userRoute.destroy(id).url);
         }
 
@@ -55,17 +55,17 @@ export default function Index({ users, filters }: { users: User[], filters: { se
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Users" />
+            <Head title="Usuarios" />
             <div className="m-4">
                 <div className="flex justify-between items-center mb-4">
                     <Link href={userRoute.create().url}>
                         <Button>
-                            Create User
+                            Crear Usuario
                         </Button>
                     </Link>
                     <div className="w-64">
                         <Input
-                            placeholder="Search users by name..."
+                            placeholder="Buscar usuarios por nombre..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -73,14 +73,14 @@ export default function Index({ users, filters }: { users: User[], filters: { se
                 </div>
                 {users.length > 0 ? (
                     <Table>
-                        <TableCaption>A list of users.</TableCaption>
+                        <TableCaption>Una lista de usuarios.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Name</TableHead>
+                                <TableHead>Nombre</TableHead>
                                 <TableHead className="text-right">Email</TableHead>
                                 <TableHead className="text-right">Rol</TableHead>
                                 <TableHead className="text-right">Estado</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
+                                <TableHead className="text-right">Acciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -93,13 +93,13 @@ export default function Index({ users, filters }: { users: User[], filters: { se
                                     <TableCell className="text-right">
                                         <Link href={userRoute.edit(user.id).url}>
                                             <Button className="mr-2">
-                                                Edit
+                                                Editar
                                             </Button>
                                         </Link>
                                         <Button disabled={processing}
                                                 className="bg-red-500 text-white" 
                                                 onClick={() => handleDelete(user.id)}>
-                                            Delete
+                                            Eliminar
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -108,7 +108,7 @@ export default function Index({ users, filters }: { users: User[], filters: { se
                     </Table>
                 ) : (
                     <div className="text-center py-10 text-muted-foreground">
-                        No users found.
+                        No se encontraron usuarios.
                     </div>
                 )}                
             </div>

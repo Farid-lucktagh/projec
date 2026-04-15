@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Sales',
+        title: 'Ventas',
         href: salesRoutes.index().url,
     },
 ];
@@ -54,14 +54,14 @@ export default function Index({ sales, filters }: { sales: Sale[], filters: { se
     }, [search]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this sale?')) {
+        if (window.confirm('¿Estás seguro de que deseas eliminar esta venta?')) {
             destroy(salesRoutes.destroy(id).url);
         }
     }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Sales" />
+            <Head title="Ventas" />
             <div className="m-4">
                 {success && (
                     <div className="mb-4 rounded-md border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-700 dark:bg-green-900/30 dark:text-green-200">
@@ -71,12 +71,12 @@ export default function Index({ sales, filters }: { sales: Sale[], filters: { se
                 <div className="flex justify-between items-center mb-4">
                     <Link href={salesRoutes.create().url}>
                         <Button>
-                            Create Sale
+                            Crear Venta
                         </Button>
                     </Link>
                     <div className="w-96">
                         <Input
-                            placeholder="Search by client name or document..."
+                            placeholder="Buscar por nombre de cliente o documento..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -110,7 +110,7 @@ export default function Index({ sales, filters }: { sales: Sale[], filters: { se
                                             className="bg-red-500 text-white"
                                             onClick={() => handleDelete(sale.id)}
                                         >
-                                            Delete
+                                            Eliminar
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -119,7 +119,7 @@ export default function Index({ sales, filters }: { sales: Sale[], filters: { se
                     </Table>
                 ) : (
                     <div className="text-center py-10 text-muted-foreground">
-                        No sales found.
+                        No se encontraron ventas.
                     </div>
                 )}
             </div>

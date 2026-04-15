@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
 
     {
-        title: 'Customers',
+        title: 'Clientes',
         href: customersRoutes.index().url,
     },
 ];
@@ -52,24 +52,24 @@ export default function Index({ customers, filters }: { customers: Customer[], f
     }, [search]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this customer?')) {
+        if (window.confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
         destroy(customersRoutes.destroy(id).url);
         }
     }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Customers | list" />
+            <Head title="Clientes | Lista" />
             <div className="m-4">
                 <div className="flex justify-between items-center mb-4">
                     <Link href={customersRoutes.create().url}>
                         <Button>
-                            Create Customer
+                            Crear Cliente
                         </Button>
                     </Link>
                     <div className="w-64">
                         <Input
-                            placeholder="Search customers by name..."
+                            placeholder="Buscar clientes por nombre..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -77,7 +77,7 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                 </div>
                 {customers.length > 0 ? (
                     <Table>
-                        <TableCaption>A list of your recent customers.</TableCaption>
+                        <TableCaption>Una lista de tus clientes recientes.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Nombre</TableHead>
@@ -103,13 +103,13 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                                     <TableCell className="text-right">
                                         <Link href={customersRoutes.edit(customer.id).url}>
                                             <Button className="mr-2">
-                                                Edit
+                                                Editar
                                             </Button>
                                         </Link>
                                         <Button disabled={processing}
                                                 className="bg-red-500 text-white" 
                                                 onClick={() => handleDelete(customer.id)}>
-                                            Delete
+                                            Eliminar
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -118,7 +118,7 @@ export default function Index({ customers, filters }: { customers: Customer[], f
                     </Table>
                 ) : (
                     <div className="text-center py-10 text-muted-foreground">
-                        No customers found.
+                        No se encontraron clientes.
                     </div>
                 )}            
             </div>

@@ -10,27 +10,11 @@ use App\Models\Invoice;
 use App\Models\SaleItem;
 use App\Models\InvoiceItem;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
+
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that's loaded on the first page visit.
-     *
-     * @see https://inertiajs.com/server-side-setup#root-template
-     *
-     * @var string
-     */
-    protected $rootView = 'app';
-
-    /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
-     */
-    public function version(Request $request): ?string
-    {
-        return parent::version($request);
-    }
-
     /**
      * Define the props that are shared by default.
      *
@@ -40,8 +24,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $locale = App::getLocale();
+        $langPath = base_path("lang/{$locale}.json");
+        $translations = File::exists($langPath) ? json_decode(File::get($langPath), true) : [];
+
         return [
             ...parent::share($request),
+            'locale' => $locale,
+            'translations' => $translations,
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),

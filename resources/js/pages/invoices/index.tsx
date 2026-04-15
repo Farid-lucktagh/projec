@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Invoices',
+        title: 'Facturas',
         href: '/invoices',
     },
 ];
@@ -60,7 +60,7 @@ export default function Index({ invoices, filters }: { invoices: Invoice[], filt
     }, [search]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Seguro que deseas eliminar esta factura?')) {
+        if (window.confirm('¿Seguro que deseas eliminar esta factura?')) {
             destroy(`/invoices/${id}`);
         }
     };
@@ -83,7 +83,7 @@ export default function Index({ invoices, filters }: { invoices: Invoice[], filt
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Invoices" />
+            <Head title="Facturas" />
 
             <div className="m-4">
 
@@ -101,7 +101,7 @@ export default function Index({ invoices, filters }: { invoices: Invoice[], filt
                     </Link>
                     <div className="w-96">
                         <Input
-                            placeholder="Search by code, client name or document..."
+                            placeholder="Buscar por código, nombre de cliente o documento..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -112,7 +112,7 @@ export default function Index({ invoices, filters }: { invoices: Invoice[], filt
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Codigo</TableHead>
+                                <TableHead>Código</TableHead>
                                 <TableHead>Cliente</TableHead>
                                 <TableHead>Documento</TableHead>
                                 <TableHead className="text-right">Subtotal</TableHead>

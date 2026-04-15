@@ -23,54 +23,57 @@ import users from '@/routes/users';
 import type { NavItem, SharedData } from '@/types';
 import AppLogo from './app-logo';
 
+import { useTranslation } from '@/hooks/use-translation';
+
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
+    const { t } = useTranslation();
     const userRole = auth.user.rol as string;
 
     const mainNavItems: NavItem[] = [
         {
-            title: 'Dashboard',
+            title: t('Dashboard'),
             href: dashboard().url,
             icon: LayoutGrid,
         },
         {
-            title: 'Products',
+            title: t('Products'),
             href: products.index().url,
             icon: Package,
             visible: ['admin', 'vendedor'].includes(userRole),
         },
         {
-            title: 'Categories',
+            title: t('Categories'),
             href: categories.index().url,
             icon: Tags,
             visible: ['admin'].includes(userRole),
         },
         {
-            title: 'Customers',
+            title: t('Customers'),
             href: customers.index().url,
             icon: Users,
             visible: ['admin', 'vendedor'].includes(userRole),
         },
         {
-            title: 'Invoices',
+            title: t('Invoices'),
             href: invoices.index().url,
             icon: Receipt,
             visible: ['admin', 'cajero'].includes(userRole),
         },
         {
-            title: 'Sales',
+            title: t('Sales'),
             href: sales.index().url,
             icon: ShoppingCart,
             visible: ['admin', 'vendedor'].includes(userRole),
         },
         {
-            title: 'Reports',
+            title: t('Reports'),
             href: reports.index().url,
             icon: ChartNoAxesCombined,
             visible: ['admin'].includes(userRole),
         },
         {
-            title: 'Users',
+            title: t('Users'),
             href: users.index().url,
             icon: UserCog,
             visible: ['admin'].includes(userRole),
@@ -79,12 +82,12 @@ export function AppSidebar() {
 
     const footerNavItems: NavItem[] = [
         {
-            title: 'Repository',
+            title: t('Repository'),
             href: 'https://github.com/Farid-lucktagh/LuckFeer',
             icon: Folder,
         },
         {
-            title: 'Documentation',
+            title: t('Documentation'),
             href: 'https://laravel.com/docs/starter-kits#react',
             icon: BookOpen,
         },

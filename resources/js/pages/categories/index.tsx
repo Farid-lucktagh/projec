@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Categories',
+        title: 'Categorías',
         href: categoriesRoute.index().url,
     },
 ];
@@ -47,7 +47,7 @@ export default function Index({ categories, filters }: { categories: Category[],
     }, [search]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this category?')) {
+        if (window.confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
             destroy(categoriesRoute.destroy(id).url);
         }
 
@@ -55,17 +55,17 @@ export default function Index({ categories, filters }: { categories: Category[],
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Categories" />
+            <Head title="Categorías" />
             <div className="m-4">
                 <div className="flex justify-between items-center mb-4">
                     <Link href={categoriesRoute.create().url}>
                         <Button>
-                            Create Category
+                            Crear Categoría
                         </Button>
                     </Link>
                     <div className="w-64">
                         <Input
-                            placeholder="Search categories by name..."
+                            placeholder="Buscar categorías por nombre..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -73,7 +73,7 @@ export default function Index({ categories, filters }: { categories: Category[],
                 </div>
                 {categories.length > 0 ? (
                     <Table>
-                        <TableCaption>A list of categories.</TableCaption>
+                        <TableCaption>Una lista de categorías.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Nombre</TableHead>
@@ -102,13 +102,13 @@ export default function Index({ categories, filters }: { categories: Category[],
                                     <TableCell className="text-right">
                                         <Link href={categoriesRoute.edit(category.id).url}>
                                             <Button className="mr-2">
-                                                Edit
+                                                Editar
                                             </Button>
                                         </Link>
                                         <Button disabled={processing}
                                                 className="bg-red-500 text-white" 
                                                 onClick={() => handleDelete(category.id)}>
-                                            Delete
+                                            Eliminar
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -117,7 +117,7 @@ export default function Index({ categories, filters }: { categories: Category[],
                     </Table>
                 ) : (
                     <div className="text-center py-10 text-muted-foreground">
-                        No categories found.
+                        No se encontraron categorías.
                     </div>
                 )}                
             </div>
