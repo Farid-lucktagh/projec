@@ -61,6 +61,12 @@ class Product extends Model
         return $this->hasMany(SaleItem::class, 'producto_id');
     }
 
+    // Un producto puede estar en muchos items de factura
+    public function itemsFactura()
+    {
+        return $this->hasMany(InvoiceItem::class, 'producto_id');
+    }
+
     /**
      * =====================
      * Scopes útiles
@@ -69,7 +75,10 @@ class Product extends Model
 
     public function scopeActivos($query)
     {
-        return $query->where('estado', 'disponible');
+        return $query->where('estado', '!=', 'inactivo')
+                     ->whereHas('categoria', function($q) {
+                         $q->where('estado', 'activo');
+                     });
     }
 
     public function scopeStockBajo($query)

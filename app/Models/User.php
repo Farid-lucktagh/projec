@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'rol',
         'estado',
+        'permissions',
     ];
 
     /**
@@ -49,6 +50,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'permissions' => 'array',
         ];
     }
     

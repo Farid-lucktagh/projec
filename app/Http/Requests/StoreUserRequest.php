@@ -27,6 +27,7 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|string|min:8',
             'rol' => 'required|string|max:255',
             'estado' => 'required|string|max:255',
+            'permissions' => 'nullable|array',
         ];
     }
 }

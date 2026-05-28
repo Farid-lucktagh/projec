@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\category;
+use App\Models\Log;
 use App\Http\Requests\StorecategoryRequest;
 use App\Http\Requests\UpdatecategoryRequest;
 
@@ -78,7 +79,14 @@ class CategoryController extends Controller
      */
     public function destroy(category $category)
     {
+        if ($category->productos()->exists()) {
+            return redirect()->back()->with('error', 'No se puede eliminar la categoría porque tiene productos asociados. Se recomienda cambiar su estado a "inactivo".');
+        }
+
         $category->delete();
+
+        Log::record('eliminar_categoria', "Se eliminó la categoría: " . $category->nombre);
+
         return redirect()->route('categories.index');
     }
 }

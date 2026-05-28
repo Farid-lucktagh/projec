@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
 import userRoute from '@/routes/users';
 import type { BreadcrumbItem } from '@/types';
@@ -18,6 +19,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const modules = [
+    { id: 'products', label: 'Productos' },
+    { id: 'categories', label: 'Categorías' },
+    { id: 'customers', label: 'Clientes' },
+    { id: 'users', label: 'Usuarios' },
+    { id: 'sales', label: 'Ventas' },
+    { id: 'invoices', label: 'Facturas' },
+    { id: 'reports', label: 'Reportes' },
+];
+
 interface user {
     id: number;
     name: string;
@@ -25,6 +36,7 @@ interface user {
     password: string;
     rol: string;
     estado: string;
+    permissions: string[] | null;
 }
 
 
@@ -33,14 +45,23 @@ export default function Edit({ user }: { user: user }) {
     const {data, setData, put, processing, errors} = useForm({
             name: user.name,
             email: user.email,
-            password: user.password,
+            password: '',
             rol: user.rol,
             estado: user.estado,
+            permissions: user.permissions || [] as string[],
     }) ;
 
     const Update = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         put(userRoute.update(user.id).url);
+    };
+
+    const handlePermissionChange = (moduleId: string, checked: boolean) => {
+        if (checked) {
+            setData('permissions', [...data.permissions, moduleId]);
+        } else {
+            setData('permissions', data.permissions.filter(id => id !== moduleId));
+        }
     };
     
     return (
@@ -71,7 +92,7 @@ export default function Edit({ user }: { user: user }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="password">User password</Label>
+                        <Label htmlFor="password">User password (dejar en blanco para no cambiar)</Label>
                         <Input
                             id="password"
                             type="password"
@@ -116,6 +137,26 @@ export default function Edit({ user }: { user: user }) {
                         </Select>
                         {errors.estado && <div className="text-red-500 text-sm">{errors.estado}</div>}
                     </div>  
+
+                    <div className="flex flex-col gap-2">
+                        <Label>Permisos de Acceso (Vistas)</Label>
+                        <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
+                            {modules.map((module) => (
+                                <div key={module.id} className="flex items-center space-x-2">
+                                    <Checkbox 
+                                        id={module.id} 
+                                        checked={data.permissions.includes(module.id)}
+                                        onCheckedChange={(checked) => handlePermissionChange(module.id, checked as boolean)}
+                                    />
+                                    <Label htmlFor={module.id} className="text-sm font-normal cursor-pointer">
+                                        {module.label}
+                                    </Label>
+                                </div>
+                            ))}
+                        </div>
+                        {errors.permissions && <div className="text-red-500 text-sm">{errors.permissions}</div>}
+                    </div>
+
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
                             Update User

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\Log;
 use App\Http\Requests\StoreproductRequest;
 use App\Http\Requests\UpdateproductRequest;
 
@@ -73,8 +74,8 @@ class ProductController extends Controller
     {
         return Inertia('products/edit', [
             'product' => $product,
-            'categorias' => Category::select('id', 'nombre')->get(),
-            'proveedores' => Supplier::select('id', 'nombre')->get(),
+            'categorias' => Category::activas()->select('id', 'nombre')->get(),
+            'proveedores' => Supplier::activos()->select('id', 'nombre')->get(),
         ]);
     }
 
@@ -93,7 +94,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        // Verificar si tiene ventas o facturas relacionadas
+        if ($product->itemsVenta()->exists() || $product->itemsFactura()->exists()) {
+            return redirect()->back()->with('error', 'No se puede eliminar el producto porque ya tiene ventas registradas. Se recomienda cambiar su estado a "inactivo".');
+        }
+
         $product->delete();
+
+        Log::record('eliminar_producto', "Se eliminó el producto: " . $product->nombre);
+
         return redirect()->route('products.index');
     }
 }

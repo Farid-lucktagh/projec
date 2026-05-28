@@ -29,6 +29,13 @@ export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
     const { t } = useTranslation();
     const userRole = auth.user.rol as string;
+    const userPermissions = auth.user.permissions || [];
+
+    const hasAccess = (module: string, defaultRoles: string[]) => {
+        if (userRole === 'admin') return true;
+        if (defaultRoles.includes(userRole)) return true;
+        return userPermissions.includes(module);
+    };
 
     const mainNavItems: NavItem[] = [
         {
@@ -40,43 +47,43 @@ export function AppSidebar() {
             title: t('Products'),
             href: products.index().url,
             icon: Package,
-            visible: ['admin', 'vendedor'].includes(userRole),
+            visible: hasAccess('products', ['admin', 'vendedor']),
         },
         {
             title: t('Categories'),
             href: categories.index().url,
             icon: Tags,
-            visible: ['admin'].includes(userRole),
+            visible: hasAccess('categories', ['admin']),
         },
         {
             title: t('Customers'),
             href: customers.index().url,
             icon: Users,
-            visible: ['admin', 'vendedor'].includes(userRole),
+            visible: hasAccess('customers', ['admin', 'vendedor']),
         },
         {
             title: t('Invoices'),
             href: invoices.index().url,
             icon: Receipt,
-            visible: ['admin', 'cajero'].includes(userRole),
+            visible: hasAccess('invoices', ['admin', 'cajero']),
         },
         {
             title: t('Sales'),
             href: sales.index().url,
             icon: ShoppingCart,
-            visible: ['admin', 'vendedor'].includes(userRole),
+            visible: hasAccess('sales', ['admin', 'vendedor']),
         },
         {
             title: t('Reports'),
             href: reports.index().url,
             icon: ChartNoAxesCombined,
-            visible: ['admin'].includes(userRole),
+            visible: hasAccess('reports', ['admin']),
         },
         {
             title: t('Users'),
             href: users.index().url,
             icon: UserCog,
-            visible: ['admin'].includes(userRole),
+            visible: hasAccess('users', ['admin']),
         }
     ].filter(item => item.visible === undefined || item.visible);
 

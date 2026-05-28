@@ -7,6 +7,7 @@ use App\Models\SaleItem;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoresaleRequest;
@@ -42,7 +43,7 @@ class SaleController extends Controller
     {
         return inertia('sales/create', [
             'customers' => Customer::where('estado', 'activo')->get(),
-            'products' => Product::with('categoria')->where('estado', 'disponible')->get(),
+            'products' => Product::with('categoria')->activos()->get(),
         ]);
     }
 
@@ -104,6 +105,9 @@ class SaleController extends Controller
             }
 
             DB::commit();
+
+            Log::record('crear_venta', "Se realizó una venta por un total de " . $validated['total']);
+
             return redirect()->route('sales.index')->with('success', 'Venta realizada con éxito');
 
         } catch (\Exception $e) {
@@ -128,9 +132,9 @@ class SaleController extends Controller
     public function edit(Sale $sale)
     {
         return inertia('sales/edit', [
-            'sale' => $sale,
+            'sale' => $sale->load('cliente', 'items.producto'),
             'customers' => Customer::where('estado', 'activo')->get(),
-            'products' => Product::with('categoria')->where('estado', 'disponible')->get(),
+            'products' => Product::with('categoria')->activos()->get(),
         ]);
     }
 
@@ -153,3 +157,4 @@ class SaleController extends Controller
         return redirect()->route('sales.index');
     }
 }
+

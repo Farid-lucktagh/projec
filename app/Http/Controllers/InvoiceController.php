@@ -7,9 +7,11 @@ use App\Models\InvoiceItem;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreInvoiceRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -41,7 +43,7 @@ class InvoiceController extends Controller
         return inertia('invoices/create', [
             'customers' => Customer::where('estado', 'activo')->get(),
             'products'  => Product::with('categoria')
-                ->where('estado', 'disponible')
+                ->activos()
                 ->get(),
         ]);
     }
@@ -117,6 +119,8 @@ class InvoiceController extends Controller
 
             DB::commit();
 
+            Log::record('crear_factura', "Se generó una factura por un total de " . $validated['total']);
+
             return redirect()
                 ->route('invoices.index')
                 ->with('success', 'Factura creada con exito');
@@ -128,6 +132,15 @@ class InvoiceController extends Controller
                 'error' => 'Error al procesar la factura: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function print(Invoice $invoice)
+    {
+        $invoice->load(['cliente', 'usuario', 'items.producto']);
+        
+        $pdf = Pdf::loadView('invoices.print', compact('invoice'));
+        
+        return $pdf->stream('factura-' . $invoice->codigo . '.pdf');
     }
 
     public function destroy(Invoice $invoice)

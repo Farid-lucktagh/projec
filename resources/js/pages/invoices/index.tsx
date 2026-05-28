@@ -12,6 +12,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { useEffect, useState } from 'react';
+import { Printer } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -169,7 +170,13 @@ export default function Index({ invoices, filters }: { invoices: Invoice[], filt
                                         {new Date(invoice.fecha_emision).toLocaleDateString()}
                                     </TableCell>
 
-                                    <TableCell className="text-right">
+                                    <TableCell className="text-right flex justify-end gap-2">
+                                        <a href={`/invoices/${invoice.id}/print`} target="_blank" rel="noreferrer">
+                                            <Button variant="outline" size="sm" className="gap-1">
+                                                <Printer className="size-3" />
+                                                Imprimir
+                                            </Button>
+                                        </a>
                                         <Button
                                             disabled={processing}
                                             variant="destructive"

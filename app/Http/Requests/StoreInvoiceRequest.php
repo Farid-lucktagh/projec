@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreInvoiceRequest extends FormRequest
 {
@@ -14,7 +15,13 @@ class StoreInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cliente_id'     => ['required', 'integer', 'exists:customers,id'],
+            'cliente_id'     => [
+                'required', 
+                'integer', 
+                Rule::exists('customers', 'id')->where(function ($query) {
+                    $query->where('estado', 'activo');
+                })
+            ],
             'metodo_pago'    => ['required', 'string', 'in:efectivo,tarjeta,transferencia'],
             'porcentaje_iva' => ['required', 'numeric', 'min:0'],
             'descuento'      => ['required', 'numeric', 'min:0'],
@@ -24,7 +31,16 @@ class StoreInvoiceRequest extends FormRequest
             'total'          => ['required', 'numeric', 'min:0'],
 
             'items'                          => ['required', 'array', 'min:1'],
-            'items.*.producto_id'             => ['required', 'integer', 'exists:products,id'],
+            'items.*.producto_id'             => [
+                'required', 
+                'integer', 
+                Rule::exists('products', 'id')->where(function ($query) {
+                    $query->where('estado', '!=', 'inactivo')
+                          ->whereIn('categoria_id', function($q) {
+                              $q->select('id')->from('categories')->where('estado', 'activo');
+                          });
+                })
+            ],
             'items.*.nombre_producto'         => ['required', 'string'],
             'items.*.categoria_producto'      => ['required', 'string'],
             'items.*.cantidad'                => ['required', 'integer', 'min:1'],

@@ -18,11 +18,40 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (!$request->user() || !in_array($request->user()->rol, $roles)) {
-            // Si el usuario no tiene el rol, redirigir al dashboard con un mensaje de error
-            return redirect()->route('dashboard')->with('error', 'No tienes permiso para acceder a este módulo.');
+        $user = $request->user();
+
+        if (!$user) {
+            return redirect()->route('login');
         }
 
-        return $next($request);
+        // Verificar si el usuario está activo
+        if ($user->estado !== 'activo') {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('login')->with('error', 'Tu usuario está inactivo. Por favor contacta al administrador.');
+        }
+
+        // Si es admin, tiene acceso total
+        if ($user->rol === 'admin') {
+            return $next($request);
+        }
+
+        // Verificar si tiene el rol requerido
+        if (in_array($user->rol, $roles)) {
+            return $next($request);
+        }
+
+        // Verificar permisos específicos (vistas)
+        // Obtenemos el módulo del nombre de la ruta (ej: products.index -> products)
+        $routeName = $request->route()->getName();
+        $module = explode('.', $routeName)[0] ?? null;
+
+        if ($module && is_array($user->permissions) && in_array($module, $user->permissions)) {
+            return $next($request);
+        }
+
+        // Si no tiene permiso, redirigir al dashboard con un mensaje de error
+        return redirect()->route('dashboard')->with('error', 'No tienes permiso para acceder a este módulo.');
     }
 }

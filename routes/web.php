@@ -45,7 +45,7 @@ Route::get('/', function () {
  * RUTAS PROTEGIDAS (requieren autenticación)
  * =====================
  */
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin,vendedor,cajero'])->group(function () {
 
     // Dashboard principal (Admin, Vendedor, Cajero)
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -129,6 +129,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index');
         Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
         Route::post('invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+        Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
         Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
     });
 
@@ -141,6 +142,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/logs', [ReportController::class, 'getLogs'])->name('reports.logs');
         Route::get('reports/export-pdf', [ReportController::class, 'exportPdf'])->name('reports.export-pdf');
+        Route::get('reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.export-excel');
         Route::get('reports/product-sales', [ReportController::class, 'getAllProductSales'])->name('reports.product-sales');
         Route::get('reports/sales-over-time', [ReportController::class, 'salesOverTime'])->name('reports.sales-over-time');
     });

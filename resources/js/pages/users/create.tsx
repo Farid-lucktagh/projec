@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
 import userRoute from '@/routes/users';
 import type { BreadcrumbItem } from '@/types';
@@ -18,6 +19,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const modules = [
+    { id: 'products', label: 'Productos' },
+    { id: 'categories', label: 'Categorías' },
+    { id: 'customers', label: 'Clientes' },
+    { id: 'users', label: 'Usuarios' },
+    { id: 'sales', label: 'Ventas' },
+    { id: 'invoices', label: 'Facturas' },
+    { id: 'reports', label: 'Reportes' },
+];
 
 export default function Create() {
 
@@ -27,11 +37,20 @@ export default function Create() {
             password: '',
             rol: 'cajero',
             estado: 'activo',
+            permissions: [] as string[],
     }) ;
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         post(userRoute.store().url);
+    };
+
+    const handlePermissionChange = (moduleId: string, checked: boolean) => {
+        if (checked) {
+            setData('permissions', [...data.permissions, moduleId]);
+        } else {
+            setData('permissions', data.permissions.filter(id => id !== moduleId));
+        }
     };
     
     return (
@@ -107,6 +126,26 @@ export default function Create() {
                         </Select>
                         {errors.estado && <div className="text-red-500 text-sm">{errors.estado}</div>}
                     </div>  
+
+                    <div className="flex flex-col gap-2">
+                        <Label>Permisos de Acceso (Vistas)</Label>
+                        <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
+                            {modules.map((module) => (
+                                <div key={module.id} className="flex items-center space-x-2">
+                                    <Checkbox 
+                                        id={module.id} 
+                                        checked={data.permissions.includes(module.id)}
+                                        onCheckedChange={(checked) => handlePermissionChange(module.id, checked as boolean)}
+                                    />
+                                    <Label htmlFor={module.id} className="text-sm font-normal cursor-pointer">
+                                        {module.label}
+                                    </Label>
+                                </div>
+                            ))}
+                        </div>
+                        {errors.permissions && <div className="text-red-500 text-sm">{errors.permissions}</div>}
+                    </div>
+
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
                             Create User

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\customer;
+use App\Models\Customer;
+use App\Models\Log;
 use App\Http\Requests\StorecustomerRequest;
 use App\Http\Requests\UpdatecustomerRequest;
 
@@ -70,15 +71,21 @@ class CustomerController extends Controller
     {
         $validated = $request->validated();
         $customer->update($validated);
+
+        Log::record('actualizar_cliente', "Se actualizó el cliente: " . $customer->nombre);
+
         return redirect()->route('customers.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(customer $customer)
+    public function destroy(Customer $customer)
     {
         $customer->delete();
+
+        Log::record('eliminar_cliente', "Se eliminó el cliente: " . $customer->nombre);
+
         return redirect()->route('customers.index');
     }
 }

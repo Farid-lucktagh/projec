@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Log;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Inertia\Inertia;
@@ -71,6 +72,9 @@ class UserController extends Controller
     {
         $valued = $request->validated();
         $user->update($valued);
+
+        Log::record('actualizar_usuario', "Se actualizó el usuario: " . $user->name);
+
         return redirect()->route('users.index');
     }
 
@@ -80,6 +84,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+
+        Log::record('eliminar_usuario', "Se eliminó el usuario: " . $user->name);
+
         return redirect()->route('users.index');
     }
 }

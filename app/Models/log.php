@@ -34,4 +34,14 @@ class Log extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
+
+    public static function record($accion, $descripcion)
+    {
+        return self::create([
+            'usuario_id' => auth()->id(),
+            'accion' => $accion,
+            'descripcion' => $descripcion,
+            'creado_en' => now(),
+        ]);
+    }
 }

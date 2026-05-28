@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,9 @@ import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
+import type { SharedData } from '@/types';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 type Props = {
     status?: string;
@@ -22,12 +25,21 @@ export default function Login({
     canResetPassword,
     canRegister,
 }: Props) {
+    const { flash } = usePage<SharedData>().props;
+
     return (
         <AuthLayout
             title="Log in to your account"
             description="Enter your email and password below to log in"
         >
             <Head title="Log in" />
+
+            {flash?.error && (
+                <Alert variant="destructive" className="mb-6">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{flash.error}</AlertDescription>
+                </Alert>
+            )}
 
             <Form
                 {...store.form()}

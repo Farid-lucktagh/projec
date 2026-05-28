@@ -4,6 +4,7 @@ export type User = {
     email: string;
     avatar?: string;
     rol: 'admin' | 'vendedor' | 'cajero';
+    permissions: string[] | null;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
     created_at: string;
@@ -12,7 +13,7 @@ export type User = {
 };
 
 export type Auth = {
-    user: User;
+    user: User | null;
 };
 
 export type TwoFactorSetupData = {

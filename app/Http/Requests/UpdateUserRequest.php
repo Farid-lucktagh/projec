@@ -27,6 +27,7 @@ class UpdateUserRequest extends FormRequest
             'password' => ['nullable', 'string', 'min:8'],
             'rol' => ['required', 'string', 'in:admin,vendedor,cajero'],
             'estado' => ['required', 'string', 'in:activo,inactivo'],
+            'permissions' => ['nullable', 'array'],
         ];
     }
 }

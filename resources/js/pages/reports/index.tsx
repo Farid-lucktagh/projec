@@ -128,6 +128,27 @@ export default function Dashboard() {
         setIsExportModalOpen(false);
     };
 
+    const handleExportExcel = () => {
+        const selectedSections = Object.entries(exportSections)
+            .filter(([_, checked]) => checked)
+            .map(([key]) => key);
+        
+        if (selectedSections.length === 0) {
+            alert('Por favor selecciona al menos una sección para el reporte.');
+            return;
+        }
+
+        const query = new URLSearchParams({
+            from: exportDates.from,
+            to: exportDates.to,
+        });
+        
+        selectedSections.forEach(section => query.append('sections[]', section));
+        
+        window.open(`/reports/export-excel?${query.toString()}`, '_blank');
+        setIsExportModalOpen(false);
+    };
+
     const toggleSection = (section: keyof typeof exportSections) => {
         setExportSections(prev => ({ ...prev, [section]: !prev[section] }));
     };
@@ -183,14 +204,14 @@ export default function Dashboard() {
                         <DialogTrigger asChild>
                             <Button variant="outline" className="gap-2">
                                 <FileDown className="size-4" />
-                                Exportar Reporte PDF
+                                Exportar Reporte
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle>Configurar Reporte PDF</DialogTitle>
+                                <DialogTitle>Configurar Reporte</DialogTitle>
                                 <DialogDescription>
-                                    Elige el rango de fechas y las secciones que deseas incluir en el reporte.
+                                    Elige el rango de fechas, las secciones y el formato que deseas para el reporte.
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
@@ -244,9 +265,13 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <DialogFooter>
+                            <DialogFooter className="gap-2">
                                 <Button type="button" variant="outline" onClick={() => setIsExportModalOpen(false)}>
                                     Cancelar
+                                </Button>
+                                <Button type="button" variant="secondary" onClick={handleExportExcel} className="gap-2">
+                                    <FileDown className="size-4" />
+                                    Generar Excel
                                 </Button>
                                 <Button type="button" onClick={handleExportPdf}>
                                     Generar PDF
