@@ -43,6 +43,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $valued = $request->validated();
+        $valued['password'] = bcrypt($valued['password']);
         User::create($valued);
         return redirect()->route('users.index');
     }
@@ -71,6 +72,14 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $valued = $request->validated();
+        
+        // Only update password if it's provided
+        if (empty($valued['password'])) {
+            unset($valued['password']);
+        } else {
+            $valued['password'] = bcrypt($valued['password']);
+        }
+        
         $user->update($valued);
 
         Log::record('actualizar_usuario', "Se actualizó el usuario: " . $user->name);

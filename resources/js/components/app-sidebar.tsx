@@ -65,7 +65,7 @@ export function AppSidebar() {
             title: t('Invoices'),
             href: invoices.index().url,
             icon: Receipt,
-            visible: hasAccess('invoices', ['admin', 'cajero']),
+            visible: hasAccess('invoices', ['admin']),
         },
         {
             title: t('Sales'),
