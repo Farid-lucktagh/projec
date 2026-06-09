@@ -10,11 +10,11 @@ import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Categories',
+        title: 'Categorías',
         href: categoriesRoutes.index().url,
     },
     {
-        title: 'Edit Category',
+        title: 'Editar Categoría',
         href: window.location.pathname,
     },
 ];
@@ -44,14 +44,14 @@ export default function Edit({ category }: { category: category }) {
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Categories | Edit" />
+            <Head title="Categorías | Editar" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <form onSubmit={Update} className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="nombre">Category name</Label>
+                        <Label htmlFor="nombre">Nombre de la categoría</Label>
                         <Input
                             id="nombre"
-                            placeholder='Category name'
+                            placeholder='Nombre de la categoría'
                             value={data.nombre}
                             onChange={e => setData('nombre', e.target.value)}
                         />
@@ -59,10 +59,10 @@ export default function Edit({ category }: { category: category }) {
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="descripcion">Category description</Label>
+                        <Label htmlFor="descripcion">Descripción de la categoría</Label>
                         <Textarea 
                             id="descripcion"
-                            placeholder="Product description" 
+                            placeholder="Descripción de la categoría" 
                             value={data.descripcion}
                             onChange={e => setData('descripcion', e.target.value)}
                         />
@@ -74,7 +74,7 @@ export default function Edit({ category }: { category: category }) {
                         <Input
                             id="color"
                             type="color"
-                            placeholder='Product color'
+                            placeholder='Color de la categoría'
                             value={data.color}
                             onChange={e => setData('color', e.target.value)}
                         />
@@ -82,13 +82,13 @@ export default function Edit({ category }: { category: category }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="estado">Status</Label>
+                        <Label htmlFor="estado">Estado</Label>
                         <Select
                             value={data.estado}
                             onValueChange={(value) => setData('estado', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a status" />
+                                <SelectValue placeholder="Selecciona un estado" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="activo">Activo</SelectItem>
@@ -99,7 +99,7 @@ export default function Edit({ category }: { category: category }) {
                     </div>  
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
-                            Update Category
+                            Actualizar Categoría
                         </Button>
                     </div>
                 </form>

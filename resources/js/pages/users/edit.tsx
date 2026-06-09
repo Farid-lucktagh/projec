@@ -10,11 +10,11 @@ import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Users',
+        title: 'Usuarios',
         href: userRoute.index().url,
     },
     {
-        title: 'Edit User',
+        title: 'Editar Usuario',
         href: window.location.pathname,
     },
 ];
@@ -66,14 +66,14 @@ export default function Edit({ user }: { user: user }) {
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Users | Edit" />
+            <Head title="Usuarios | Editar" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <form onSubmit={Update} className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="name">User name</Label>
+                        <Label htmlFor="name">Nombre del usuario</Label>
                         <Input
                             id="name"
-                            placeholder='User name'
+                            placeholder='Nombre del usuario'
                             value={data.name}
                             onChange={e => setData('name', e.target.value)}
                         />
@@ -81,10 +81,11 @@ export default function Edit({ user }: { user: user }) {
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="email">User email</Label>
+                        <Label htmlFor="email">Correo electrónico del usuario</Label>
                         <Input
                             id="email"
-                            placeholder='User email'
+                            type="email"
+                            placeholder='Correo electrónico del usuario'
                             value={data.email}
                             onChange={e => setData('email', e.target.value)}
                         />
@@ -92,11 +93,11 @@ export default function Edit({ user }: { user: user }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="password">User password (dejar en blanco para no cambiar)</Label>
+                        <Label htmlFor="password">Contraseña del usuario (dejar en blanco para no cambiar)</Label>
                         <Input
                             id="password"
                             type="password"
-                            placeholder='User password'
+                            placeholder='Contraseña'
                             value={data.password}
                             onChange={e => setData('password', e.target.value)}
                         />
@@ -104,16 +105,16 @@ export default function Edit({ user }: { user: user }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="rol">User role</Label>
+                        <Label htmlFor="rol">Rol del usuario</Label>
                         <Select
                             value={data.rol}
                             onValueChange={(value) => setData('rol', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a role" />
+                                <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="admin">Admin</SelectItem>
+                                <SelectItem value="admin">Administrador</SelectItem>
                                 <SelectItem value="vendedor">Vendedor</SelectItem>
                                 <SelectItem value="cajero">Cajero</SelectItem>
                             </SelectContent>
@@ -122,13 +123,13 @@ export default function Edit({ user }: { user: user }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="estado">Status</Label>
+                        <Label htmlFor="estado">Estado</Label>
                         <Select
                             value={data.estado}
                             onValueChange={(value) => setData('estado', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a status" />
+                                <SelectValue placeholder="Selecciona un estado" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="activo">Activo</SelectItem>
@@ -159,7 +160,7 @@ export default function Edit({ user }: { user: user }) {
 
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
-                            Update User
+                            Actualizar Usuario
                         </Button>
                     </div>
                 </form>

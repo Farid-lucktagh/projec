@@ -10,11 +10,11 @@ import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Products',
+        title: 'Productos',
         href: productsRoutes.index().url,
     },
     {
-        title: 'Create Product',
+        title: 'Crear Producto',
         href: productsRoutes.create().url,
     },
 ];
@@ -53,14 +53,14 @@ export default function Create({ categorias, proveedores }: Props) {
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Products | create" />
+            <Head title="Productos | crear" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <form onSubmit={submit} className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="nombre">Product name</Label>
+                        <Label htmlFor="nombre">Nombre del producto</Label>
                         <Input
                             id="nombre"
-                            placeholder='Product name'
+                            placeholder='Nombre del producto'
                             value={data.nombre}
                             onChange={e => setData('nombre', e.target.value)}
                         />
@@ -68,10 +68,10 @@ export default function Create({ categorias, proveedores }: Props) {
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="descripcion">Product description</Label>
+                        <Label htmlFor="descripcion">Descripción del producto</Label>
                         <Textarea 
                             id="descripcion"
-                            placeholder="Product description" 
+                            placeholder="Descripción del producto" 
                             value={data.descripcion}
                             onChange={e => setData('descripcion', e.target.value)}
                         />
@@ -79,13 +79,13 @@ export default function Create({ categorias, proveedores }: Props) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="categoria_id">Category</Label>
+                        <Label htmlFor="categoria_id">Categoría</Label>
                         <Select
                             value={data.categoria_id}
                             onValueChange={(value) => setData('categoria_id', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a category" />
+                                <SelectValue placeholder="Selecciona una categoría" />
                             </SelectTrigger>
                             <SelectContent>
                                 {categorias.map((categoria) => (
@@ -99,13 +99,13 @@ export default function Create({ categorias, proveedores }: Props) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="proveedor_id">Supplier</Label>
+                        <Label htmlFor="proveedor_id">Proveedor</Label>
                         <Select
                             value={data.proveedor_id}
                             onValueChange={(value) => setData('proveedor_id', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a supplier" />
+                                <SelectValue placeholder="Selecciona un proveedor" />
                             </SelectTrigger>
                             <SelectContent>
                                 {proveedores.map((proveedor) => (
@@ -119,11 +119,11 @@ export default function Create({ categorias, proveedores }: Props) {
                     </div>     
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="precio">Price</Label>
+                        <Label htmlFor="precio">Precio</Label>
                         <Input
                             id="precio"
                             type="number"
-                            placeholder='Product price'
+                            placeholder='Precio del producto'
                             value={data.precio}
                             onChange={e => setData('precio', e.target.value)}
                         />
@@ -135,7 +135,7 @@ export default function Create({ categorias, proveedores }: Props) {
                         <Input
                             id="cantidad_stock"
                             type="number"
-                            placeholder='Product stock'
+                            placeholder='Stock del producto'
                             value={data.cantidad_stock}
                             onChange={e => setData('cantidad_stock', e.target.value)}
                         />
@@ -143,13 +143,13 @@ export default function Create({ categorias, proveedores }: Props) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="estado">Status</Label>
+                        <Label htmlFor="estado">Estado</Label>
                         <Select
                             value={data.estado}
                             onValueChange={(value) => setData('estado', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a status" />
+                                <SelectValue placeholder="Selecciona un estado" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="disponible">Disponible</SelectItem>
@@ -161,7 +161,7 @@ export default function Create({ categorias, proveedores }: Props) {
                     </div>  
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
-                            Create Product
+                            Crear Producto
                         </Button>
                     </div>
                 </form>

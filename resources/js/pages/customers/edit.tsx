@@ -4,16 +4,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AppLayout from '@/layouts/app-layout';
-import customerRoutes from '@/routes/customers';
+import customersRoutes from '@/routes/customers';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Customers',
-        href: customerRoutes.index().url,
+        title: 'Clientes',
+        href: customersRoutes.index().url,
     },
     {
-        title: 'Edit Customer',
+        title: 'Editar Cliente',
         href: window.location.pathname,
     },
 ];
@@ -46,19 +46,19 @@ export default function Edit({ customer }: { customer: customer }) {
 
     const Update = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        put(customerRoutes.update(customer.id).url);
+        put(customersRoutes.update(customer.id).url);
     };
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Customers | Edit" />
+            <Head title="Clientes | Editar" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <form onSubmit={Update} className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="nombre">Customer name</Label>
+                        <Label htmlFor="nombre">Nombre del cliente</Label>
                         <Input
                             id="nombre"
-                            placeholder='Customer name'
+                            placeholder='Nombre del cliente'
                             value={data.nombre}
                             onChange={e => setData('nombre', e.target.value)}
                         />
@@ -66,21 +66,28 @@ export default function Edit({ customer }: { customer: customer }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="tipo_documento">Document type</Label>
-                        <Input
-                            id="tipo_documento"
-                            placeholder='Document type'
+                        <Label htmlFor="tipo_documento">Tipo de documento</Label>
+                        <Select
                             value={data.tipo_documento}
-                            onChange={e => setData('tipo_documento', e.target.value)}
-                        />
+                            onValueChange={(value) => setData('tipo_documento', value)}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Selecciona un tipo de documento" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="cedula">Cédula</SelectItem>
+                                <SelectItem value="tarjeta_identidad">Tarjeta de Identidad</SelectItem>
+                                <SelectItem value="pasaporte">Pasaporte</SelectItem>
+                            </SelectContent>
+                        </Select>
                         {errors.tipo_documento && <div className="text-red-500 text-sm">{errors.tipo_documento}</div>}
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="numero_documento">Document number</Label>
+                        <Label htmlFor="numero_documento">Número de documento</Label>
                         <Input
                             id="numero_documento"
-                            placeholder='Document number'
+                            placeholder='Número de documento'
                             value={data.numero_documento}
                             onChange={e => setData('numero_documento', e.target.value)}
                         />
@@ -88,10 +95,10 @@ export default function Edit({ customer }: { customer: customer }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="telefono">Phone</Label>
+                        <Label htmlFor="telefono">Teléfono</Label>
                         <Input
                             id="telefono"
-                            placeholder='Phone'
+                            placeholder='Teléfono'
                             value={data.telefono}
                             onChange={e => setData('telefono', e.target.value)}
                         />
@@ -99,10 +106,11 @@ export default function Edit({ customer }: { customer: customer }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="correo">Email</Label>
+                        <Label htmlFor="correo">Correo electrónico</Label>
                         <Input
                             id="correo"
-                            placeholder='Email'
+                            type="email"
+                            placeholder='Correo electrónico'
                             value={data.correo}
                             onChange={e => setData('correo', e.target.value)}
                         />
@@ -110,10 +118,10 @@ export default function Edit({ customer }: { customer: customer }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="direccion">Address</Label>
+                        <Label htmlFor="direccion">Dirección</Label>
                         <Input
                             id="direccion"
-                            placeholder='Address'
+                            placeholder='Dirección'
                             value={data.direccion}
                             onChange={e => setData('direccion', e.target.value)}
                         />
@@ -121,10 +129,11 @@ export default function Edit({ customer }: { customer: customer }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="total_compras">Total purchases</Label>
+                        <Label htmlFor="total_compras">Total de compras</Label>
                         <Input
                             id="total_compras"
-                            placeholder='Total purchases'
+                            type="number"
+                            placeholder='Total de compras'
                             value={data.total_compras}
                             onChange={e => setData('total_compras', Number(e.target.value))}
                         />
@@ -132,17 +141,17 @@ export default function Edit({ customer }: { customer: customer }) {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="estado">Status</Label>
+                        <Label htmlFor="estado">Estado</Label>
                         <Select
                             value={data.estado}
                             onValueChange={(value) => setData('estado', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a status" />
+                                <SelectValue placeholder="Selecciona un estado" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="activo">activo</SelectItem>
-                                <SelectItem value="inactivo">inactivo</SelectItem>
+                                <SelectItem value="activo">Activo</SelectItem>
+                                <SelectItem value="inactivo">Inactivo</SelectItem>
                             </SelectContent>
                         </Select>
                         {errors.estado && <div className="text-red-500 text-sm">{errors.estado}</div>}
@@ -150,7 +159,7 @@ export default function Edit({ customer }: { customer: customer }) {
 
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
-                            Update Customer
+                            Actualizar Cliente
                         </Button>
                     </div>
                 </form>

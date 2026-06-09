@@ -64,7 +64,7 @@ interface RegistrosTotals extends SharedData {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Reports',
+        title: 'Reportes',
         href: reportsRoutes.index().url,
     },
 ];
@@ -194,7 +194,7 @@ export default function Dashboard() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Reports" />
+            <Head title="Reportes" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 
                 <div className="flex items-center justify-between">

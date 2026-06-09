@@ -4,17 +4,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AppLayout from '@/layouts/app-layout';
-import custmoerRoutes from '@/routes/customers';
+import customersRoutes from '@/routes/customers';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Customers',
-        href: custmoerRoutes.index().url,
+        title: 'Clientes',
+        href: customersRoutes.index().url,
     },
     {
-        title: 'Create Customer',
-        href: custmoerRoutes.create().url,
+        title: 'Crear Cliente',
+        href: customersRoutes.create().url,
     },
 ];
 
@@ -33,19 +33,19 @@ export default function Create() {
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(custmoerRoutes.store().url);
+        post(customersRoutes.store().url);
     };
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Customers | create" />
+            <Head title="Clientes | crear" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <form onSubmit={submit} className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="nombre">Customer name</Label>
+                        <Label htmlFor="nombre">Nombre del cliente</Label>
                         <Input
                             id="nombre"
-                            placeholder='Customer name'
+                            placeholder='Nombre del cliente'
                             value={data.nombre}
                             onChange={e => setData('nombre', e.target.value)}
                         />
@@ -53,13 +53,13 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="tipo_documento">Document type</Label>
+                        <Label htmlFor="tipo_documento">Tipo de documento</Label>
                         <Select
                             value={data.tipo_documento}
                             onValueChange={(value) => setData('tipo_documento', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select document type" />
+                                <SelectValue placeholder="Selecciona un tipo de documento" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="cedula">Cédula</SelectItem>
@@ -71,10 +71,10 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="numero_documento">Document number</Label>
+                        <Label htmlFor="numero_documento">Número de documento</Label>
                         <Input
                             id="numero_documento"
-                            placeholder='Document number'
+                            placeholder='Número de documento'
                             value={data.numero_documento}
                             onChange={e => setData('numero_documento', e.target.value)}
                         />
@@ -82,10 +82,10 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="telefono">Phone</Label>
+                        <Label htmlFor="telefono">Teléfono</Label>
                         <Input
                             id="telefono"
-                            placeholder='Phone number'
+                            placeholder='Número de teléfono'
                             value={data.telefono}
                             onChange={e => setData('telefono', e.target.value)}
                         />
@@ -93,11 +93,11 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="correo">Email</Label>
+                        <Label htmlFor="correo">Correo electrónico</Label>
                         <Input
                             id="correo"
                             type="email"
-                            placeholder='Email address'
+                            placeholder='Correo electrónico'
                             value={data.correo}
                             onChange={e => setData('correo', e.target.value)}
                         />
@@ -105,10 +105,10 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="direccion">Address</Label>
+                        <Label htmlFor="direccion">Dirección</Label>
                         <Input
                             id="direccion"
-                            placeholder='Address'
+                            placeholder='Dirección'
                             value={data.direccion}
                             onChange={e => setData('direccion', e.target.value)}
                         />
@@ -116,11 +116,11 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="total_compras">Total purchases</Label>
+                        <Label htmlFor="total_compras">Total de compras</Label>
                         <Input
                             id="total_compras"
                             type="number"
-                            placeholder='Total purchases'
+                            placeholder='Total de compras'
                             value={data.total_compras}
                             onChange={e => setData('total_compras', Number(e.target.value))}
                         />
@@ -128,13 +128,13 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="estado">Status</Label>
+                        <Label htmlFor="estado">Estado</Label>
                         <Select
                             value={data.estado}
                             onValueChange={(value) => setData('estado', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a status" />
+                                <SelectValue placeholder="Selecciona un estado" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="activo">Activo</SelectItem>
@@ -145,7 +145,7 @@ export default function Create() {
                     </div>  
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
-                            Create Product
+                            Crear Cliente
                         </Button>
                     </div>
                 </form>

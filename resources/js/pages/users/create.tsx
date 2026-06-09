@@ -10,11 +10,11 @@ import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Users',
+        title: 'Usuarios',
         href: userRoute.index().url,
     },
     {
-        title: 'Create User',
+        title: 'Crear Usuario',
         href: userRoute.create().url,
     },
 ];
@@ -55,14 +55,14 @@ export default function Create() {
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Users | create" />
+            <Head title="Usuarios | crear" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <form onSubmit={submit} className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="name">User name</Label>
+                        <Label htmlFor="name">Nombre del usuario</Label>
                         <Input
                             id="name"
-                            placeholder='User name'
+                            placeholder='Nombre del usuario'
                             value={data.name}
                             onChange={e => setData('name', e.target.value)}
                         />
@@ -70,10 +70,11 @@ export default function Create() {
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="email">User email</Label>
+                        <Label htmlFor="email">Correo electrónico del usuario</Label>
                         <Input
                             id="email"
-                            placeholder='User email'
+                            type="email"
+                            placeholder='Correo electrónico del usuario'
                             value={data.email}
                             onChange={e => setData('email', e.target.value)}
                         />
@@ -81,11 +82,11 @@ export default function Create() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Contraseña</Label>
                         <Input
                             id="password"
-                            type='password'
-                            placeholder='Password'
+                            type="password"
+                            placeholder='Contraseña'
                             value={data.password}
                             onChange={e => setData('password', e.target.value)}
                         />
@@ -99,7 +100,7 @@ export default function Create() {
                             onValueChange={(value) => setData('rol', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a rol" />
+                                <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="cajero">Cajero</SelectItem>
@@ -111,13 +112,13 @@ export default function Create() {
                     </div> 
 
                     <div className="flex flex-col gap-2">
-                        <Label htmlFor="estado">Status</Label>
+                        <Label htmlFor="estado">Estado</Label>
                         <Select
                             value={data.estado}
                             onValueChange={(value) => setData('estado', value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a status" />
+                                <SelectValue placeholder="Selecciona un estado" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="activo">Activo</SelectItem>
@@ -148,7 +149,7 @@ export default function Create() {
 
                     <div className="flex items-center gap-4">
                         <Button type="submit" disabled={processing}>
-                            Create User
+                            Crear Usuario
                         </Button>
                     </div>
                 </form>
