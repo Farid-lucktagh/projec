@@ -7,9 +7,9 @@
 
 Sistema web de inventario, facturación y punto de venta para negocios pequeños
 
-Negocio de herramientas y materiales de construcción — Bogotá
+Negocio de herramientas y materiales de construcción — pto. Serviez
 
-[Tu nombre] · [Institución] · 2026
+Herramientas y materiales de construcción · 2026
 
 ---
 

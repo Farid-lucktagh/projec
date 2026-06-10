@@ -13,6 +13,8 @@ import { request } from '@/routes/password';
 import type { SharedData } from '@/types';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { Zap, LogIn, UserPlus, Wrench, Hammer, Ruler, Drill, Settings } from 'lucide-react';
+
 
 type Props = {
     status?: string;
@@ -40,6 +42,33 @@ export default function Login({
                     <AlertDescription>{(flash as any).error}</AlertDescription>
                 </Alert>
             )}
+
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] text-primary opacity-5 animate-bounce" style={{ animationDelay: '6s' }}>
+            <Wrench size={48} />
+          </div>
+          <div className="absolute top-[20%] right-[10%] text-primary opacity-4 animate-pulse" style={{ animationDelay: '6.5s' }}>
+            <Hammer size={56} />
+          </div>
+          <div className="absolute bottom-[30%] left-[15%] text-primary opacity-3 animate-bounce" style={{ animationDelay: '7s' }}>
+            <Settings size={44} />
+          </div>
+          <div className="absolute bottom-[20%] right-[5%] text-primary opacity-4 animate-pulse" style={{ animationDelay: '7.5s' }}>
+            <Ruler size={64} />
+          </div>
+          <div className="absolute top-[60%] left-[80%] text-primary opacity-3 animate-bounce" style={{ animationDelay: '8s' }}>
+            <Drill size={52} />
+          </div>
+          <div className="absolute top-[40%] left-[40%] text-primary opacity-2 animate-pulse" style={{ animationDelay: '8.5s' }}>
+            <Wrench size={40} />
+          </div>
+          <div className="absolute bottom-[10%] left-[50%] text-primary opacity-3 animate-bounce" style={{ animationDelay: '9s' }}>
+            <Hammer size={48} />
+          </div>
+          <div className="absolute top-[15%] right-[40%] text-primary opacity-2 animate-pulse" style={{ animationDelay: '9.5s' }}>
+            <Settings size={36} />
+          </div>
+        </div>
 
             <Form
                 {...store.form()}
